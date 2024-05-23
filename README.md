@@ -18,7 +18,7 @@ cd creditkarma_export_transactions
 ```
 
 Or if you don't want to have to mess with using `git`, you can just copy the
-code in the `fetch_credit_karma_transactions` file in this repository, and
+code in the [fetch_credit_karma_transactions](fetch_credit_karma_transactions) file in this repository, and
 paste it into a local file with the same name.
 
 Then [get the access token](#access-token), and in the directory with the
