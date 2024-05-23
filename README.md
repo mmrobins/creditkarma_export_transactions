@@ -2,7 +2,7 @@
 
 A ruby script to export transactions from
 [creditKarma](https://www.creditkarma.com) to json and csv.  Especially useful
-if you forgot to export your Mint data before being forced to move.  Easily importable to [Monarch Money](https://help.monarchmoney.com/hc/en-us/articles/9163024504468-Exporting-data-from-Mint#h_01HGBPJ7YTJDHZSZEJ4BA2Z511)
+if you forgot to export your [Mint](https://mint.intuit.com/) data before being forced to move.  Easily importable to [Monarch Money](https://help.monarchmoney.com/hc/en-us/articles/9163024504468-Exporting-data-from-Mint#h_01HGBPJ7YTJDHZSZEJ4BA2Z511)
 
 I didn't use anything not in the Ruby stdlib, so should be easy to get running
 even for those not too familiar with Ruby.
