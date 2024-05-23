@@ -15,8 +15,18 @@ back to 2008 when I started using it.
 ```bash
 git clone https://github.com/mmrobins/creditkarma_export_transactions.git
 cd creditkarma_export_transactions
+```
+
+Or if you don't want to have to mess with using `git`, you can just copy the
+code in the `fetch_credit_karma_transactions` file in this repository, and
+paste it into a local file with the same name.
+
+Then [get the access token](#access-token), and in the directory with the
+`fetch_credit_karma_transactions` file run
+
+```
 export MY_ACCESS_TOKEN=eyJetc
-./fetch_credit_karma_transactions
+ruby fetch_credit_karma_transactions
     getting next page cursor:
     total transactions: 100, last date: 2024-04-20
     getting next page cursor: dHhuIzIwMjQtMDQtMjAjMTg5ODI0MTU1MV8w
@@ -28,7 +38,12 @@ export MY_ACCESS_TOKEN=eyJetc
     done
 ```
 
-Now do what you want with the `creditkarma_transactions.csv` and `creditkarma_transactions.json` files that were generated.  The CSV is in the format Mint used to use so can be uploaded fairly easily to other services.  The JSON file is a verbose dump of the GraphQL API results that creditKarma returns, just in case there's data in there that isn't correctly parsed and dumped to the CSV
+Now do what you want with the `creditkarma_transactions.csv` and
+`creditkarma_transactions.json` files that were generated.  The CSV is in the
+format Mint used to use so can be uploaded fairly easily to other services.
+The JSON file is a verbose dump of the GraphQL API results that creditKarma
+returns, just in case there's data in there that isn't correctly parsed and
+dumped to the CSV
 
 ## Access Token
 
@@ -48,7 +63,7 @@ Example:
 
 ```bash
 $ export MY_ACCESS_TOKEN=eyJMyNewtoken
-$ ./fetch_credit_karma_transactions
+$ ruby fetch_credit_karma_transactions
 getting next page cursor: dHhuIzIwMjQtMDItMDUjMTg5MDUxMjUxOF8w
 total transactions: 100, last date: 2024-01-10
 ...
@@ -56,7 +71,7 @@ total transactions: 1900, last date: 2023-02-21
 getting next page cursor: dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w
 make_call.rb:42:in `get_transactions': error: 401 body: {"errorCode":"TOKEN_NEEDS_REFRESH"} (RuntimeError)
 
-$ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w ./fetch_credit_karma_transactions
+$ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w ruby fetch_credit_karma_transactions
 ```
 
 ## Debugging
