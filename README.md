@@ -22,12 +22,16 @@ code in the `fetch_credit_karma_transactions` file in this repository, and
 paste it into a local file with the same name.
 
 Then [get the access token](#access-token), and in the directory with the
-`fetch_credit_karma_transactions` file run
+[fetch_credit_karma_transactions](fetch_credit_karma_transactions) file run
 
 ```
 export MY_ACCESS_TOKEN=eyJetc
 ruby fetch_credit_karma_transactions
-    getting next page cursor:
+```
+
+Example output
+
+```
     total transactions: 100, last date: 2024-04-20
     getting next page cursor: dHhuIzIwMjQtMDQtMjAjMTg5ODI0MTU1MV8w
     total transactions: 200, last date: 2024-03-31
