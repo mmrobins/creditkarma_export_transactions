@@ -1,0 +1,145 @@
+#!/usr/bin/env ruby
+
+# This script will fetch all of your credit karma transactions and write them to a csv file.
+# Set MY_ACCESS_TOKEN to your credit karma access token, which you can get from the browser console on the creditkarma site calls to the graphql api in the authorization header
+# Set START_CURSOR to the last cursor you attempted to fetch from, if you want to restart where you left off.
+# Set DEBUG=1 to see the json entries for each transaction
+
+require 'net/http'
+require 'json'
+
+# only need this for debugging, and not in standard lib
+require 'awesome_print' if ENV['DEBUG']
+
+def debug(msg)
+  ap msg if ENV['DEBUG']
+end
+
+# Load the query from a file cause it's long and crappy to read
+load 'crap_gql_query'
+
+@access_token = ENV['MY_ACCESS_TOKEN']
+raise "gotta set ENV['MY_ACCESS_TOKEN']" unless @access_token
+
+def get_transactions(after_cursor = nil)
+  variables = {
+      "input": {
+          "paginationInput": {
+              "afterCursor": after_cursor
+          },
+          "categoryInput": {
+              "categoryId": nil,
+              "primeCategoryType": nil
+          },
+          "datePeriodInput": {
+              "datePeriod": nil
+          },
+          "accountInput": {}
+      }
+  }
+
+  params = {
+    "query": @query,
+    'variables': variables,
+  }
+  headers = {
+      'Authorization' => "Bearer #{@access_token}",
+      'Content-Type' =>'application/json',
+  }
+
+  uri = URI('https://api.creditkarma.com/graphql')
+  https = Net::HTTP.new(uri.host, uri.port)
+  https.use_ssl = true
+  response = https.post(uri.path, params.to_json, headers)
+  if response.code != '200'
+    if response.code == '401'
+      puts <<-HEREDOC
+      First you'll need to update your access token, which you can get from the browser console on the creditkarma site.
+
+      export MY_ACCESS_TOKEN=your_new_access_token_here
+
+      You can restart where you left off by setting the START_CURSOR env var to the last attempted value: #{after_cursor}
+
+      Example:
+
+      $ ./fetch_credit_karma_transactions
+      getting next page cursor: dHhuIzIwMjQtMDItMDUjMTg5MDUxMjUxOF8w
+      total transactions: 100, last date: 2024-01-10
+      ...
+      total transactions: 1900, last date: 2023-02-21
+      getting next page cursor: dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w
+      make_call.rb:42:in `get_transactions': error: 401 body: {"errorCode":"TOKEN_NEEDS_REFRESH"} (RuntimeError)
+
+      $ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w fetch_credit_karma_transactions
+
+      HEREDOC
+    end
+
+    raise "error: #{response.code} body: #{response.body}"
+  end
+  resp = JSON.parse(response.body)
+  debug resp
+  resp
+end
+
+total_transactions = []
+has_next_page = true
+# fine if this is nil to start
+cursor = ENV['START_CURSOR']
+
+# This is useful for importing into anything that supports the mint CSV format, like monarchmoney.com
+out_file_csv = File.new("creditkarma_transactions.csv", "a")
+# This is basically a raw dump in case there's something useful in there that I didn't parse out to the CSV
+out_file_full_json = File.new("creditkarma_transactions.json", "a")
+
+if out_file_csv.size == 0
+  # https://help.monarchmoney.com/hc/en-us/articles/9163024504468-Exporting-data-from-Mint#h_01HGBPJ7YTJDHZSZEJ4BA2Z511
+  out_file_csv.puts %Q{"Date","Description","Original Description","Amount","Transaction Type","Category","Account Name","Labels","Notes"}
+end
+
+while has_next_page
+  puts "getting next page cursor: #{cursor}"
+  resp = get_transactions(cursor)
+  tra_batch = resp['data']['prime']['transactionsHub']['transactionPage']['transactions'].map do |tra|
+    out_file_full_json.puts tra.to_json
+
+    desc = tra['description']
+    date = tra['date']
+    status = tra['status']
+
+    # very annoying to not just use negative numbers where it makes sense.  oh well
+    tra_type = tra['amount']['value'].negative? ? 'debit' : 'credit'
+    amt = tra['amount']['value'].abs
+
+    acct = tra['account']['name']
+    cat = tra['category']['name']
+    merch = tra['merchant']['name']
+
+    # https://help.monarchmoney.com/hc/en-us/articles/9163024504468-Exporting-data-from-Mint#h_01HGBPJ7YTJDHZSZEJ4BA2Z511
+    #Date,Description,Original Description,Amount,Transaction Type,Category,Account Name,Labels,Notes
+    out_file_csv.puts %Q{"#{date}","#{merch}","#{desc}","#{amt}","#{tra_type}","#{cat}","#{acct}","",""}
+
+    new_tra = {
+      desc: desc,
+      date: date,
+      status: status,
+      amt: amt,
+      tra_type: tra_type,
+      acct: acct,
+      cat: cat,
+      merch: merch
+    }
+    debug new_tra
+    new_tra
+  end
+
+  total_transactions += tra_batch
+  puts "total transactions: #{total_transactions.size}, last date: #{tra_batch.last[:date]}"
+
+  page_info = resp['data']['prime']['transactionsHub']['transactionPage']['pageInfo']
+  cursor = page_info['endCursor']
+  has_next_page = page_info['hasNextPage']
+end
+
+out_file_csv.close
+out_file_full_json.close

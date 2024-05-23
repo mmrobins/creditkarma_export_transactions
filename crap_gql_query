@@ -1,0 +1,3831 @@
+# not sure how to get rid of the SHIT Prime_ServerError stuff
+# always errors if I do
+# so the fragments below are a gigantic mess
+@query = <<-HEREDOC
+query GetTransactions($input: Prime_TransactionFiltersInput) {
+    prime {
+        transactionsHub(input: $input) {
+            ...on Prime_Transactions {
+                transactionPage {
+                    __typename...on Prime_TransactionPage {
+                        transactions {
+                            __typename...on Prime_Transaction {
+                                id date description status amount {
+                                    __typename...on Prime_AmountOfUsd {
+                                        value asCurrencyString
+                                    }
+                                }
+                                account {
+                                    id name type providerName accountTypeAndNumberDisplay
+                                }
+                                category {
+                                    id name type
+                                }
+                                merchant {
+                                    id name
+                                }
+                            }
+                        }
+                        pageInfo {
+                            ...on Prime_PageInfo {
+                                startCursor endCursor hasNextPage hasPreviousPage
+                            }
+                        }
+                    }
+                }
+            }
+            ...on Prime_ServerError {
+                cards {
+                    __typename...on FabricCardAny {
+                        ...fabricCardAny
+                    }
+                }
+            }
+        }
+    }
+}
+fragment kplViewGroup on KPLViewGroup {
+    metadata {
+        ...on KPLMetadata {
+            ...kplMetadata __typename
+        }
+        __typename
+    }
+    views {
+        ...kplViewType...on KPLExperimentationView {
+            ...kplExperimentationView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplViewTypeAny on KPLViewTypeAny {
+    kplView {
+        ...kplViewType __typename
+    }
+    __typename
+}
+fragment kplViewType on KPLViewType {
+    ...on FabricDataVisualizationGroup {
+        ...fabricDataVisualizationGroup __typename
+    }
+...on KPLAccordionView {
+        ...kplAccordionView __typename
+    }
+...on KPLAdvertiserDisclosure {
+        ...kplAdvertiserDisclosure __typename
+    }
+...on KPLBadgeView {
+        ...kplBadgeView __typename
+    }
+...on KPLBarChart {
+        ...kplBarChart __typename
+    }
+...on KPLBenefitPillarView {
+        ...kplBenefitPillarView __typename
+    }
+...on KPLBenefitPillarGroup {
+        ...kplBenefitPillarGroup __typename
+    }
+...on KPLBottomTakeover {
+        ...kplBottomTakeover __typename
+    }
+...on KPLButtonView {
+        ...kplButtonView __typename
+    }
+...on KPLButtonGroup {
+        ...kplButtonGroup __typename
+    }
+...on KPLButtonParagraphGroup {
+        ...kplButtonParagraphGroup __typename
+    }
+...on KPLCardView {
+        ...kplCardView __typename
+    }
+...on KPLCertainty {
+        ...kplCertainty __typename
+    }
+...on KPLChangeIndicator {
+        ...kplChangeIndicator __typename
+    }
+...on KPLCheckboxGroup {
+        ...kplCheckboxGroup __typename
+    }
+...on KPLCheckboxView {
+        ...kplCheckboxView __typename
+    }
+...on KPLChoiceChipView {
+        ...kplChoiceChipView __typename
+    }
+...on KPLComparisonTableView {
+        ...kplComparisonTableView __typename
+    }
+...on KPLDateInputView {
+        ...kplDateInputView __typename
+    }
+...on KPLDividerView {
+        ...kplDividerView __typename
+    }
+...on KPLDropdownView {
+        ...kplDropdownView __typename
+    }
+...on KPLFeedbackView {
+        ...kplFeedbackView __typename
+    }
+...on KPLFormFieldLabelView {
+        ...kplFormFieldLabelView __typename
+    }
+...on KPLGaugeChart {
+        ...kplGaugeChart __typename
+    }
+...on KPLImageView {
+        ...kplImageView __typename
+    }
+...on KPLInformationDisclosureView {
+        ...kplInformationDisclosureView __typename
+    }
+...on KPLKeyValueGridView {
+        ...kplKeyValueGridView __typename
+    }
+...on KPLKeyValueGridViewV2 {
+        ...kplKeyValueGridViewV2 __typename
+    }
+...on KPLLegend {
+        ...kplLegend __typename
+    }
+...on KPLLineGraphView {
+        ...kplLineGraphView __typename
+    }
+...on KPLLineGraphViewV2 {
+        ...kplLineGraphViewV2 __typename
+    }
+...on KPLListView {
+        ...kplListView __typename
+    }
+...on KPLMeterView {
+        ...kplMeterView __typename
+    }
+...on KPLMetricView {
+        ...kplMetricView __typename
+    }
+...on KPLNoticeView {
+        ...kplNoticeView __typename
+    }
+...on KPLParagraphView {
+        ...kplParagraphView __typename
+    }
+...on KPLPartialTakeoverView {
+        ...kplPartialTakeoverView __typename
+    }
+...on KPLPeriodSelector {
+        ...kplPeriodSelector __typename
+    }
+...on KPLRadioButtonGroup {
+        ...kplRadioButtonGroup __typename
+    }
+...on KPLRatingView {
+        ...kplRatingView __typename
+    }
+...on KPLRouterView {
+        ...kplRouterView __typename
+    }
+...on KPLRowView {
+        ...kplRowView __typename
+    }
+...on KPLSectionHeaderView {
+        ...kplSectionHeaderView __typename
+    }
+...on KPLSegmentedChoiceView {
+        ...kplSegmentedChoiceView __typename
+    }
+...on KPLSegmentedMeter {
+        ...kplSegmentedMeter __typename
+    }
+...on KPLSparkLine {
+        ...kplSparkLine __typename
+    }
+...on KPLStatusDotView {
+        ...kplStatusDotView __typename
+    }
+...on KPLStepperView {
+        ...kplStepperView __typename
+    }
+...on KPLSwitchView {
+        ...kplSwitchView __typename
+    }
+...on KPLSwimlaneGroup {
+        ...kplSwimlaneGroup __typename
+    }
+...on KPLTextAreaView {
+        ...kplTextAreaView __typename
+    }
+...on KPLTextInputView {
+        ...kplTextInputView __typename
+    }
+...on KPLTimelineView {
+        ...kplTimelineView __typename
+    }
+...on KPLToggleChipView {
+        ...kplToggleChipView __typename
+    }
+...on KPLSocialSecurityInputView {
+        ...kplSocialSecurityInputView __typename
+    }
+    __typename
+}
+fragment kplActionType on IKPLActionType {
+    ...on KPLVisibilityAction {
+        ...kplVisibilityAction __typename
+    }
+...on KPLDismissAction {
+        ...kplDismissAction __typename
+    }
+...on KPLRefreshPageAction {
+        kplActionInterfaceMarker __typename
+    }
+...on KPLScrollAction {
+        ...kplScrollAction __typename
+    }
+    __typename
+}
+fragment kplVisibilityAction on KPLVisibilityAction {
+    kplActionInterfaceMarker actionGroupId actionComponentId visible __typename
+}
+fragment kplDismissAction on KPLDismissAction {
+    kplActionInterfaceMarker actionGroupId actionComponentId persistForHours dismissEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplScrollAction on KPLScrollAction {
+    kplActionInterfaceMarker scrollToInteractive {
+        ...kplInteractive __typename
+    }
+    __typename
+}
+fragment kplFooter on KPLFooter {
+    footer {
+        ...on KPLPinnedButtonGroup {
+            ...kplPinnedButtonGroup __typename
+        }
+...on KPLPinnedButtonParagraphGroup {
+            ...kplPinnedButtonParagraphGroup __typename
+        }
+        __typename
+    }
+    metadata {
+        ...on KPLMetadata {
+            ...kplMetadata __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplHeader on KPLHeader {
+    header {
+        ...on KPLDefaultHeader {
+            ...kplDefaultHeader __typename
+        }
+...on KPLHeroImageHeader {
+            ...kplHeroImageHeader __typename
+        }
+...on KPLHeroNumberHeader {
+            ...kplHeroNumberHeader __typename
+        }
+        __typename
+    }
+    metadata {
+        ...on KPLMetadata {
+            ...kplMetadata __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplLayout on KPLLayout {
+    layout {
+        ...on KPLSingleMessagePage {
+            ...kplSingleMessagePage __typename
+        }
+...on KPLFeatureWalkthroughView {
+            ...kplFeatureWalkthroughView __typename
+        }
+        __typename
+    }
+    metadata {
+        ...on KPLMetadata {
+            ...kplMetadata __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment formattedTextInfo on FormattedText {
+    spans {
+        text format {
+            italic strong link {
+                ...destinationInfo __typename
+            }
+            clickEvent {
+                ...clickEventInfo __typename
+            }
+            fontWeight __typename
+        }
+        textStyle: style {
+            ...textStyleInfo __typename
+        }
+        styles {
+            ...styleInfo __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment formattedTextBasicPopUpInfo on FormattedText {
+    spans {
+        text format {
+            italic strong link {
+                ...basicPopUpDestinationInfo __typename
+            }
+            clickEvent {
+                ...clickEventInfo __typename
+            }
+            fontWeight __typename
+        }
+        textStyle: style {
+            ...textStyleInfo __typename
+        }
+        styles {
+            ...styleInfo __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment textStyleInfo on TextStyle {
+    color __typename
+}
+fragment styleInfo on FBStyle {
+    headerType __typename
+}
+fragment buttonStyle on ButtonStyle {
+    id __typename
+}
+fragment clickEventInfo on ClickEvent {
+    trackingPayload __typename
+}
+fragment impressionEventInfo on ImpressionEvent {
+    trackingPayload __typename
+}
+fragment basicClientImage on BasicClientImage {
+    imageId imageUrl impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    accessibleDescription __typename
+}
+fragment basicClientButton on BasicClientButton {
+    destination {
+        ...destinationInfo __typename
+    }
+    cta {
+        ...formattedTextInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    styles {
+        ...buttonStyle __typename
+    }
+    buttonIcon {
+        ...basicClientButtonIcon __typename
+    }
+    kplStyle {
+        ...kplButtonStyle __typename
+    }
+    accessibleDescription accessibleHint __typename
+}
+fragment kplButtonStyle on KPLButtonStyle {
+    theme size __typename
+}
+fragment basicClientButtonIcon on BasicClientButtonIcon {
+    icon {
+        ...basicClientImage __typename
+    }
+    position __typename
+}
+fragment clickableAction on IClientClickableAction {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    __typename
+}
+fragment fabricCardAny on FabricCardAny {
+    item {
+        ...on FabricContentCard {
+            ...fabricContentCard __typename
+        }
+...on FabricSimpleHeaderCard {
+            ...fabricSimpleHeaderCard __typename
+        }
+...on FabricArticleCard {
+            ...fabricArticleCard __typename
+        }
+...on FabricSwimlane {
+            ...fabricSwimlane __typename
+        }
+...on FabricFeaturedContentCard {
+            ...fabricFeaturedContentCard __typename
+        }
+...on FabricSectionHeaderCard {
+            ...fabricSectionHeaderCard __typename
+        }
+...on FabricNoticeCard {
+            ...fabricNoticeCard __typename
+        }
+...on FabricFeedbackCard {
+            ...fabricFeedbackCard __typename
+        }
+...on KPLViewGroup {
+            ...kplViewGroup __typename
+        }
+...on KPLHeader {
+            ...kplHeader __typename
+        }
+...on KPLFooter {
+            ...kplFooter __typename
+        }
+...on KPLLayout {
+            ...kplLayout __typename
+        }
+...on FabricComposableRootAny {
+            ...fabricComposableRoot __typename
+        }
+...on FabricTakeoverV2 {
+            ...fabricTakeoverV2 __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricSectionHeaderCard on FabricSectionHeaderCard {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    sectionTitle {
+        ...formattedTextInfo __typename
+    }
+    sectionSubtitle {
+        ...formattedTextInfo __typename
+    }
+    headerActionButton {
+        ...basicClientButton __typename
+    }
+    sectionHeaderTheme {
+        titleSize __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricSimpleHeaderCard on FabricSimpleHeaderCard {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    heading {
+        ...formattedTextInfo __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricArticleCard on FabricArticleCard {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    image {
+        ...basicClientImage __typename
+    }
+    title {
+        ...formattedTextInfo __typename
+    }
+    subTitle {
+        ...formattedTextInfo __typename
+    }
+    button {
+        ...basicClientButton __typename
+    }
+    dismissData {
+        ...fabricDismissData __typename
+    }
+    articleCardTheme: theme {
+        imageTheme __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricSwimlaneRouterCard on FabricSwimlaneRouterCard {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    routerPrimaryImage {
+        ...basicClientImage __typename
+    }
+    routerBackground {
+        ...fabricBackground __typename
+    }
+    routerTitle {
+        ...formattedTextInfo __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricContentCard on FabricContentCard {
+    destination {
+        ...destinationInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    background {
+        ...fabricBackground __typename
+    }
+    contentCardHeader: header {
+        ...fabricCardHeader __typename
+    }
+    entries {
+        ...fabricCardEntry __typename
+    }
+    contentCardFooter: footer {
+        ...fabricCardFooter __typename
+    }
+    theme {
+        elevated __typename
+    }
+    dismissData {
+        ...fabricDismissData __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricSwimlane on FabricSwimlane {
+    cards {
+        ...fabricSwimlaneCard __typename
+    }
+    __typename
+}
+fragment fabricSwimlaneCard on IFabricSwimlaneCard {
+    ...on FabricArticleCard {
+        ...fabricArticleCard __typename
+    }
+...on FabricSwimlaneRouterCard {
+        ...fabricSwimlaneRouterCard __typename
+    }
+    __typename
+}
+fragment fabricDismissData on DismissData {
+    component {
+        ...dismissComponent __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    clientSideState {
+        persistForHours __typename
+    }
+    key __typename
+}
+fragment dismissComponent on DismissComponent {
+    ...on DismissButton {
+        icon {
+            ...basicClientImage __typename
+        }
+        theme {
+            small __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricFeaturedContentCard on FabricFeaturedContentCard {
+    dismissData {
+        ...fabricDismissData __typename
+    }
+    featuredContentTitle {
+        ...formattedTextInfo __typename
+    }
+    featuredContentPrimaryButton {
+        ...basicClientButton __typename
+    }
+    featuredContentSubtitle {
+        ...formattedTextInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricNoticeCard on FabricNoticeCard {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    dismissData {
+        ...fabricDismissData __typename
+    }
+    noticeTitle {
+        ...formattedTextInfo __typename
+    }
+    noticeDescription {
+        ...formattedTextInfo __typename
+    }
+    noticeStatusIcon {
+        ...basicClientImage __typename
+    }
+    noticeTheme {
+        noticeThemeType __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricFeedbackCard on FabricFeedbackCard {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    feedbackIdentifier feedbackPrompt {
+        ...formattedTextInfo __typename
+    }
+    feedbackHelpText {
+        ...formattedTextInfo __typename
+    }
+    feedbackComponent {
+        ...fabricFeedbackComponent __typename
+    }
+    footerText {
+        ...formattedTextInfo __typename
+    }
+    successText {
+        ...formattedTextInfo __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment fabricFeedbackComponent on FabricFeedbackComponent {
+    ...on FabricSegmentedChoice {
+        ...fabricSegmentedChoice __typename
+    }
+    __typename
+}
+fragment fabricSegmentedChoice on FabricSegmentedChoice {
+    choices {
+        clickEvent {
+            ...clickEventInfo __typename
+        }
+        choiceTitle {
+            ...formattedTextInfo __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricCardEntry on IFabricEntry {
+    ...on FabricImageEntry {
+        ...fabricImageEntry __typename
+    }
+...on FabricProgressEntry {
+        ...fabricProgressEntry __typename
+    }
+...on FabricRowEntry {
+        ...fabricRowEntry __typename
+    }
+...on FabricRowComponentEntry {
+        ...fabricRowComponentEntry __typename
+    }
+...on FabricTextEntry {
+        ...fabricTextEntry __typename
+    }
+...on FabricLabelEntry {
+        ...fabricLabelEntry __typename
+    }
+...on FabricListEntry {
+        ...fabricListEntry __typename
+    }
+...on FabricButtonEntry {
+        ...fabricButtonEntry __typename
+    }
+...on FabricWellEntry {
+        ...fabricWellEntry __typename
+    }
+...on TodayViewCollectionsScoreGraph {
+        ...todayViewCollectionsScoreGraph __typename
+    }
+...on FabricThumbnailEntry {
+        ...fabricThumbnailEntry __typename
+    }
+...on FabricPlaceholderEntry {
+        ...fabricPlaceholderEntry __typename
+    }
+...on FabricScoreDialsEntry {
+        ...fabricScoreDialsEntry __typename
+    }
+...on FabricPrimaryValueEntry {
+        ...fabricPrimaryValueEntry __typename
+    }
+    __typename
+}
+fragment fabricRowEntry on FabricRowEntry {
+    text {
+        ...formattedTextInfo __typename
+    }
+    textHighlight value {
+        ...formattedTextInfo __typename
+    }
+    theme {
+        compact __typename
+    }
+...clickableAction annotations {
+        ...on FabricCardRowEntryTextAnnotation {
+            text {
+                ...formattedTextInfo __typename
+            }
+            highlight __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricRowComponentEntry on FabricRowComponentEntry {
+    rowTitle {
+        ...formattedTextInfo __typename
+    }
+    primaryImage {
+        ...basicClientImage __typename
+    }
+    rowValue {
+        ...formattedTextInfo __typename
+    }
+    statusText {
+        ...formattedTextInfo __typename
+    }
+    statusIndicatorColor impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    rowTheme {
+        imageSize __typename
+    }
+    __typename
+}
+fragment fabricButtonEntry on FabricButtonEntry {
+    button {
+        ...basicClientButton __typename
+    }
+    colorTheme buttonTheme: theme {
+        ...fabricButtonEntryTheme __typename
+    }
+    __typename
+}
+fragment fabricButtonEntryTheme on FabricButtonEntryTheme {
+    hugsContent reduceVerticalPadding __typename
+}
+fragment fabricProgressEntry on FabricProgressEntry {
+    progressTitle: title {
+        ...formattedTextInfo __typename
+    }
+    valueText {
+        ...formattedTextInfo __typename
+    }
+    segments {
+        ...fabricProgressSegment __typename
+    }
+    topAxisLabels {
+        ...fabricProgressAxisLabels __typename
+    }
+    bottomAxisLabels {
+        ...fabricProgressAxisLabels __typename
+    }
+    __typename
+}
+fragment fabricProgressSegment on FabricProgressSegment {
+    percentage color empty showIndicator __typename
+}
+fragment fabricProgressAxisLabels on FabricProgressAxisLabels {
+    elements {
+        ...on FabricProgressAxisLabelElementSingle {
+            ...fabricProgressAxisLabelElementSingle __typename
+        }
+...on FabricProgressAxisLabelElementRange {
+            ...fabricProgressAxisLabelElementRange __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricProgressAxisLabelElementSingle on FabricProgressAxisLabelElementSingle {
+    position text {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment fabricProgressAxisLabelElementRange on FabricProgressAxisLabelElementRange {
+    start end text {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment commonDeltaAnnotation on CommonDeltaAnnotation {
+    color value {
+        ...formattedTextInfo __typename
+    }
+    direction __typename
+}
+fragment fabricTextEntry on FabricTextEntry {
+    title {
+        ...formattedTextInfo __typename
+    }
+    subTitle {
+        ...formattedTextInfo __typename
+    }
+    delta {
+        ...commonDeltaAnnotation __typename
+    }
+    theme {
+        halfWidth __typename
+    }
+    __typename
+}
+fragment fabricWellEntry on FabricWellEntry {
+    headerText {
+        ...formattedTextInfo __typename
+    }
+    primaryText {
+        ...formattedTextInfo __typename
+    }
+    primaryPrefixImage {
+        ...basicClientImage __typename
+    }
+    fabricTheme: theme {
+        pillTheme {
+            background {
+                ...on FabricBackgroundColor {
+                    color __typename
+                }
+                __typename
+            }
+            __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricThumbnailEntry on FabricThumbnailEntry {
+    headerImage {
+        ...basicClientImage __typename
+    }
+    header {
+        ...formattedTextInfo __typename
+    }
+    thumbnailImage {
+        ...basicClientImage __typename
+    }
+    title {
+        ...formattedTextInfo __typename
+    }
+    description {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment fabricPlaceholderEntry on FabricPlaceholderEntry {
+    placeholderLayout __typename
+}
+fragment fabricListEntry on FabricListEntry {
+    listItems {
+        ...fabricListEntryItem __typename
+    }
+    subTitle {
+        ...formattedTextInfo __typename
+    }
+    detailItemStriping __typename
+}
+fragment fabricListEntryItem on FabricListEntryItem {
+    ...on FabricListEntryKeyValueItem {
+        ...fabricListEntryKeyValueItem __typename
+    }
+...on FabricListEntryBulletedItem {
+        ...fabricListEntryBulletedItem __typename
+    }
+...on FabricListEntryIconItem {
+        ...fabricListEntryIconItem __typename
+    }
+...on FabricListEntryNumberedItem {
+        ...fabricListEntryNumberedItem __typename
+    }
+...on FabricListEntryDetailItem {
+        ...fabricListEntryDetailItem __typename
+    }
+    __typename
+}
+fragment fabricListEntryKeyValueItem on FabricListEntryKeyValueItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    value {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment fabricListEntryBulletedItem on FabricListEntryBulletedItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    bulletColor __typename
+}
+fragment fabricListEntryIconItem on FabricListEntryIconItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    icon {
+        ...basicClientImage __typename
+    }
+    iconColor __typename
+}
+fragment fabricListEntryNumberedItem on FabricListEntryNumberedItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    numberColor __typename
+}
+fragment fabricListEntryDetailItem on FabricListEntryDetailItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    value {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment fabricImageEntry on FabricImageEntry {
+    image {
+        ...basicClientImage __typename
+    }
+    theme {
+        halfWidth __typename
+    }
+    imageSize __typename
+}
+fragment fabricLabelEntry on FabricLabelEntry {
+    label {
+        ...formattedTextInfo __typename
+    }
+    labelTheme: theme {
+        ...fabricLabelEntryTheme __typename
+    }
+    __typename
+}
+fragment fabricLabelEntryTheme on FabricLabelEntryTheme {
+    centered reduceVerticalPadding __typename
+}
+fragment fabricBackground on FabricBackground {
+    ...on FabricBackgroundColor {
+        color __typename
+    }
+...on FabricBackgroundImage {
+        image {
+            ...basicClientImage __typename
+        }
+        backgroundColor __typename
+    }
+...on FabricBackgroundHexColor {
+        hexColor: color __typename
+    }
+    __typename
+}
+fragment fabricPrimaryValueEntry on FabricPrimaryValueEntry {
+    primaryValueTitle {
+        ...formattedTextInfo __typename
+    }
+    primaryValueText {
+        ...formattedTextInfo __typename
+    }
+    primaryValueSubtitle {
+        ...formattedTextInfo __typename
+    }
+    primaryValueDisclaimer {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment fabricScoreDialsEntry on FabricScoreDialsEntry {
+    creditScores {
+        ...on FabricScoreDialsCreditScores {
+            transunion {
+                ...fabricScoreDialsCreditScore __typename
+            }
+            equifax {
+                ...fabricScoreDialsCreditScore __typename
+            }
+            __typename
+        }
+        __typename
+    }
+    scoreDialsTheme {
+        cardTheme __typename
+    }
+    __typename
+}
+fragment fabricScoreDialsCreditScore on FabricScoreDialsCreditScore {
+    timestamp value delta rating {
+        ...formattedTextInfo __typename
+    }
+    bureau {
+        ...formattedTextInfo __typename
+    }
+...clickableAction __typename
+}
+fragment fabricCardFooter on FabricCardFooter {
+    ...on FabricCardRichFooter {
+        ...fabricCardRichFooter __typename
+    }
+...on FabricCardButtonsFooter {
+        ...fabricCardButtonsFooter __typename
+    }
+    __typename
+}
+fragment fabricCardRichFooter on FabricCardRichFooter {
+    footerImage {
+        ...basicClientImage __typename
+    }
+    buttons {
+        ...basicClientButton __typename
+    }
+    __typename
+}
+fragment fabricCardButtonsFooter on FabricCardButtonsFooter {
+    buttons {
+        ...basicClientButton __typename
+    }
+    __typename
+}
+fragment fabricCardHeader on FabricCardHeader {
+    ...on FabricCardRichHeader {
+        ...fabricCardRichHeader __typename
+    }
+    __typename
+}
+fragment fabricCardRichHeader on FabricCardRichHeader {
+    cardTitle {
+        ...formattedTextInfo __typename
+    }
+    title {
+        ...formattedTextInfo __typename
+    }
+    titleImage {
+        ...basicClientImage __typename
+    }
+    subTitle {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment todayViewCollectionsScoreGraph on TodayViewCollectionsScoreGraph {
+    fabricEntryInterfaceMarker bureau __typename
+}
+fragment kplAccordionView on KPLAccordionView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    accordionSize accordionTitle {
+        ...formattedTextInfo __typename
+    }
+    accordionIcon {
+        ...basicClientImage __typename
+    }
+    accordionIconColor accordionDisabled accordionContent {
+        ...on KPLButtonView {
+            ...kplButtonView __typename
+        }
+...on KPLButtonGroup {
+            ...kplButtonGroup __typename
+        }
+...on KPLButtonParagraphGroup {
+            ...kplButtonParagraphGroup __typename
+        }
+...on KPLCardView {
+            ...kplCardView __typename
+        }
+...on KPLInformationDisclosureView {
+            ...kplInformationDisclosureView __typename
+        }
+...on KPLListView {
+            ...kplListView __typename
+        }
+...on KPLParagraphView {
+            ...kplParagraphView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplAdvertiserDisclosure on KPLAdvertiserDisclosure {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    advertiserDisclosureMessage {
+        ...formattedTextInfo __typename
+    }
+    advertiserDisclosureLinkText actions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplBadgeView on KPLBadgeView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    badgeText {
+        ...formattedTextInfo __typename
+    }
+    badgeTheme badgeIcon {
+        ...basicClientImage __typename
+    }
+    accessibleDescription __typename
+}
+fragment kplBenefitPillarView on KPLBenefitPillarView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    benefitPillarType benefitPillarTitle {
+        ...formattedTextInfo __typename
+    }
+    benefitPillarDescription {
+        ...formattedTextInfo __typename
+    }
+    benefitPillarImage {
+        ...basicClientImage __typename
+    }
+    __typename
+}
+fragment kplBottomTakeover on KPLBottomTakeover {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    takeoverContent {
+        ...on KPLBottomTakeoverActionView {
+            ...kplBottomTakeoverActionView __typename
+        }
+...on KPLBottomTakeoverMultiActionView {
+            ...kplBottomTakeoverMultiActionView __typename
+        }
+        __typename
+    }
+    dismissAction {
+        ...kplDismissAction __typename
+    }
+    bottomTakeoverTracking {
+        ...kplOverlay __typename
+    }
+    isVisibleByDefault __typename
+}
+fragment kplBottomTakeoverActionView on KPLBottomTakeoverActionView {
+    title {
+        ...formattedTextInfo __typename
+    }
+    description {
+        ...formattedTextInfo __typename
+    }
+    contentImage {
+        ...basicClientImage __typename
+    }
+    contentCta {
+        ...kplButtonGroup __typename
+    }
+    exitButton __typename
+}
+fragment kplBottomTakeoverMultiActionView on KPLBottomTakeoverMultiActionView {
+    multiActionCancelChoice {
+        ...kplMultiActionChoice __typename
+    }
+    multiActionDestructiveChoice {
+        ...kplMultiActionChoice __typename
+    }
+    multiActionOtherChoices {
+        ...kplMultiActionChoice __typename
+    }
+    __typename
+}
+fragment kplMultiActionChoice on KPLMultiActionChoice {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    choiceTitle interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    actions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplButtonView on KPLButtonView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    button {
+        ...basicClientButton __typename
+    }
+    disabled buttonAlignment actions {
+        ...kplActionType __typename
+    }
+    buttonColorOverride {
+        ...kplButtonColorOverride __typename
+    }
+    __typename
+}
+fragment kplButtonColorOverride on KPLButtonColorOverride {
+    backgroundColorNormal {
+        ...kplButtonColor __typename
+    }
+    backgroundColorHighlighted {
+        ...kplButtonColor __typename
+    }
+    backgroundColorDisabled {
+        ...kplButtonColor __typename
+    }
+    borderWidth borderColorNormal {
+        ...kplButtonColor __typename
+    }
+    borderColorHighlighted {
+        ...kplButtonColor __typename
+    }
+    borderColorDisabled {
+        ...kplButtonColor __typename
+    }
+    textColorNormal {
+        ...kplButtonColor __typename
+    }
+    textColorHighlighted {
+        ...kplButtonColor __typename
+    }
+    textColorDisabled {
+        ...kplButtonColor __typename
+    }
+    __typename
+}
+fragment kplButtonColor on KPLButtonColor {
+    color fallbackColor __typename
+}
+fragment kplCardView on KPLCardView {
+    destination {
+        ...destinationInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    card {
+        ...on KPLFlatCard {
+            ...kplFlatCard __typename
+        }
+...on KPLElevatedCard {
+            ...kplElevatedCard __typename
+        }
+...on KPLCelebrationCard {
+            ...kplCelebrationCard __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplFlatCard on KPLFlatCard {
+    flatCardImage {
+        ...basicClientImage __typename
+    }
+    flatCardTitle {
+        ...formattedTextInfo __typename
+    }
+    flatCardDescription {
+        ...formattedTextInfo __typename
+    }
+    flatCardImageBackgroundColor flatCardButtonText {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplElevatedCard on KPLElevatedCard {
+    dismissData {
+        ...fabricDismissData __typename
+    }
+    elevatedCardImage {
+        ...basicClientImage __typename
+    }
+    elevatedCardTitle {
+        ...formattedTextInfo __typename
+    }
+    elevatedCardDescription {
+        ...formattedTextInfo __typename
+    }
+    elevatedCardButtonText {
+        ...formattedTextInfo __typename
+    }
+    elevatedCardImageTheme {
+        orientation size __typename
+    }
+    __typename
+}
+fragment kplCelebrationCard on KPLCelebrationCard {
+    celebrationCardImage {
+        ...basicClientImage __typename
+    }
+    celebrationCardTitle {
+        ...formattedTextInfo __typename
+    }
+    celebrationCardButtonText {
+        ...formattedTextInfo __typename
+    }
+    celebrationCardBackgroundColor __typename
+}
+fragment kplCertainty on KPLCertainty {
+    certaintyText {
+        ...formattedTextInfo __typename
+    }
+    certaintyIcon {
+        ...basicClientImage __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    actions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplChangeIndicator on KPLChangeIndicator {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    changeIndicatorSentiment changeIndicatorDirection changeIndicatorSize changeIndicatorValue {
+        ...formattedTextInfo __typename
+    }
+    changeIndicatorDescription {
+        ...formattedTextInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    __typename
+}
+fragment kplCheckboxView on KPLCheckboxView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    disabled checkboxState __typename
+}
+fragment kplChoiceChipView on KPLChoiceChipView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    choiceChips {
+        ...kplChoiceChipItem __typename
+    }
+    choiceChipType maxSelectedChoices __typename
+}
+fragment kplChoiceChipItem on KPLChoiceChipItem {
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    key choiceTitle {
+        ...formattedTextInfo __typename
+    }
+    choiceDescription {
+        ...formattedTextInfo __typename
+    }
+    choiceIcon {
+        ...basicClientImage __typename
+    }
+    default disabled exclusiveChoice __typename
+}
+fragment kplComparisonTableView on KPLComparisonTableView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    comparisonTable {
+        ...on KPLTwoColumnComparisonTable {
+            ...kplTwoColumnComparisonTable __typename
+        }
+...on KPLThreeColumnComparisonTable {
+            ...kplThreeColumnComparisonTable __typename
+        }
+...on KPLFourColumnComparisonTable {
+            ...kplFourColumnComparisonTable __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplTwoColumnComparisonTable on KPLTwoColumnComparisonTable {
+    twoColumnRowBlock {
+        ...kplTwoColumnRowBlock __typename
+    }
+    __typename
+}
+fragment kplTwoColumnRowBlock on KPLTwoColumnRowBlock {
+    label firstColumnValue secondColumnValue link {
+        ...kplButtonView __typename
+    }
+    __typename
+}
+fragment kplThreeColumnComparisonTable on KPLThreeColumnComparisonTable {
+    zerothColumnLabel firstColumnLabel secondColumnLabel threeColumnBlock {
+        ...on KPLThreeColumnSectionBlock {
+            ...kplThreeColumnSectionBlock __typename
+        }
+...on KPLThreeColumnRowBlock {
+            ...kplThreeColumnRowBlock __typename
+        }
+        __typename
+    }
+    highlightColumn boldColumn boldLastRow __typename
+}
+fragment kplThreeColumnSectionBlock on KPLThreeColumnSectionBlock {
+    section threeColumnRowBlock {
+        ...kplThreeColumnRowBlock __typename
+    }
+    __typename
+}
+fragment kplThreeColumnRowBlock on KPLThreeColumnRowBlock {
+    label firstColumnValue secondColumnValue __typename
+}
+fragment kplFourColumnComparisonTable on KPLFourColumnComparisonTable {
+    zerothColumnLabel firstColumnLabel secondColumnLabel thirdColumnLabel fourColumnBlock {
+        ...on KPLFourColumnSectionBlock {
+            ...kplFourColumnSectionBlock __typename
+        }
+...on KPLFourColumnRowBlock {
+            ...kplFourColumnRowBlock __typename
+        }
+        __typename
+    }
+    highlightColumn boldColumn boldLastRow __typename
+}
+fragment kplFourColumnSectionBlock on KPLFourColumnSectionBlock {
+    section fourColumnRowBlock {
+        ...kplFourColumnRowBlock __typename
+    }
+    __typename
+}
+fragment kplFourColumnRowBlock on KPLFourColumnRowBlock {
+    label firstColumnValue secondColumnValue thirdColumnValue {
+        ...on KPLComparisonTableValueStringCell {
+            ...kplComparisonTableValueStringCell __typename
+        }
+...on KPLComparisonTableValueChangeCell {
+            ...kplComparisonTableValueChangeCell __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplComparisonTableValueStringCell on KPLComparisonTableValueStringCell {
+    value __typename
+}
+fragment kplComparisonTableValueChangeCell on KPLComparisonTableValueChangeCell {
+    value icon __typename
+}
+fragment kplDateInputView on KPLDateInputView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    dateFormat dateInputValue __typename
+}
+fragment kplDividerView on KPLDividerView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    dividerType customSpacing {
+        ...fabricCustomSpacing __typename
+    }
+    __typename
+}
+fragment kplDropdownView on KPLDropdownView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    dropdownOptions {
+        ...kplDropdownOption __typename
+    }
+    dropdownPlaceholder __typename
+}
+fragment kplDropdownOption on KPLDropdownOption {
+    displayText value
+    default clickEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplExperimentationView on KPLExperimentationView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    experimentalViewName experimentValues {
+        ...kplExperimentationKeyValuePair __typename
+    }
+    lookalikeViews {
+        ...kplViewType __typename
+    }
+    __typename
+}
+fragment kplExperimentationKeyValuePair on KPLExperimentationKeyValuePair {
+    key value {
+        ...on BasicClientButton {
+            ...basicClientButton __typename
+        }
+...on BasicClientImage {
+            ...basicClientImage __typename
+        }
+...on KPLExperimentationBoolean {
+            ...kplExperimentationBoolean __typename
+        }
+...on KPLExperimentationColor {
+            ...kplExperimentationColor __typename
+        }
+...on KPLExperimentationDateTime {
+            ...kplExperimentationDateTime __typename
+        }
+...on KPLExperimentationFloat {
+            ...kplExperimentationFloat __typename
+        }
+...on KPLExperimentationFormattedText {
+            ...kplExperimentationFormattedText __typename
+        }
+...on KPLExperimentationInt {
+            ...kplExperimentationInt __typename
+        }
+...on KPLExperimentationString {
+            ...kplExperimentationString __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplExperimentationBoolean on KPLExperimentationBoolean {
+    booleanValue __typename
+}
+fragment kplExperimentationColor on KPLExperimentationColor {
+    colorIdValue __typename
+}
+fragment kplExperimentationDateTime on KPLExperimentationDateTime {
+    dateTimeValue __typename
+}
+fragment kplExperimentationFloat on KPLExperimentationFloat {
+    floatValue __typename
+}
+fragment kplExperimentationFormattedText on KPLExperimentationFormattedText {
+    formattedTextValue {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplExperimentationInt on KPLExperimentationInt {
+    intValue __typename
+}
+fragment kplExperimentationString on KPLExperimentationString {
+    stringValue __typename
+}
+fragment kplFeatureWalkthroughView on KPLFeatureWalkthroughView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    featureWalkthroughPages {
+        ...kplFeatureWalkthroughPage __typename
+    }
+    __typename
+}
+fragment kplFeatureWalkthroughPage on KPLFeatureWalkthroughPage {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    featureWalkthroughPageImage {
+        ...basicClientImage __typename
+    }
+    featureWalkthroughPageTitle {
+        ...formattedTextInfo __typename
+    }
+    featureWalkthroughPageDetail {
+        ...on KPLParagraphView {
+            ...kplParagraphView __typename
+        }
+...on KPLListView {
+            ...kplListView __typename
+        }
+        __typename
+    }
+    featureWalkthroughPageDisclosure {
+        ...on KPLInformationDisclosureView {
+            ...kplInformationDisclosureView __typename
+        }
+...on KPLParagraphView {
+            ...kplParagraphView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplFeedbackView on KPLFeedbackView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    feedbackIdentifier feedbackFormFieldLabel {
+        ...kplFormFieldLabelView __typename
+    }
+    feedbackComponent {
+        ...kplFeedbackComponent __typename
+    }
+    feedbackFooterText {
+        ...formattedTextInfo __typename
+    }
+    feedbackSuccessText {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplFeedbackComponent on KPLFeedbackComponent {
+    ...on KPLSegmentedChoiceView {
+        ...kplSegmentedChoiceView __typename
+    }
+    __typename
+}
+fragment kplFormFieldLabelView on KPLFormFieldLabelView {
+    formFieldTitle {
+        ...formattedTextInfo __typename
+    }
+    formFieldHelpText {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplIconButtonView on KPLIconButtonView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    imageId imageUrl clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    iconButtonTheme accessibleDescription accessibleHint __typename
+}
+fragment kplImageFloatingTheme on KPLImageFloatingTheme {
+    kplImageThemeInterfaceMarker kplImageBackgroundColor __typename
+}
+fragment kplImageFullBleedTheme on KPLImageFullBleedTheme {
+    kplImageThemeInterfaceMarker removeHeightLimit __typename
+}
+fragment iKplImageTheme on IKPLImageTheme {
+    ...on KPLImageFloatingTheme {
+        ...kplImageFloatingTheme __typename
+    }
+...on KPLImageFullBleedTheme {
+        ...kplImageFullBleedTheme __typename
+    }
+    __typename
+}
+fragment kplImageView on KPLImageView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    kplImage {
+        ...basicClientImage __typename
+    }
+    kplImageTheme {
+        ...iKplImageTheme __typename
+    }
+    __typename
+}
+fragment kplInformationDisclosureView on KPLInformationDisclosureView {
+    informationDisclosureText {
+        ...formattedTextInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    actions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplKeyValueGridView on KPLKeyValueGridView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    keyValueNumberColumns keyValuePairs {
+        ...kplKeyValuePair __typename
+    }
+    __typename
+}
+fragment kplKeyValuePair on KPLKeyValuePair {
+    displayValue {
+        ...formattedTextInfo __typename
+    }
+    displayKey {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplKeyValueGridViewV2 on KPLKeyValueGridViewV2 {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    keyValueColumnCount keyValueItems {
+        ...kplKeyValueItem __typename
+    }
+    keyValueDividerTheme {
+        ...kplKeyValueGridV2DividerTheme __typename
+    }
+    __typename
+}
+fragment kplKeyValueItem on KPLKeyValueItem {
+    titleView {
+        ...kplKeyValueItemTitle __typename
+    }
+    displayValue {
+        ...formattedTextInfo __typename
+    }
+    descriptors {
+        ...kplKeyValueItemDescriptor __typename
+    }
+    __typename
+}
+fragment kplKeyValueItemTitle on KPLKeyValueItemTitle {
+    ...on FormattedText {
+        ...formattedTextInfo __typename
+    }
+...on KPLInformationDisclosureView {
+        ...kplInformationDisclosureView __typename
+    }
+    __typename
+}
+fragment kplKeyValueItemDescriptor on KPLKeyValueItemDescriptor {
+    ...on FormattedText {
+        ...formattedTextInfo __typename
+    }
+...on KPLRatingView {
+        ...kplRatingView __typename
+    }
+...on KPLChangeIndicator {
+        ...kplChangeIndicator __typename
+    }
+...on KPLButtonView {
+        ...kplButtonView __typename
+    }
+    __typename
+}
+fragment kplKeyValueGridV2DividerTheme on KPLKeyValueGridV2DividerTheme {
+    ...on KPLKeyValueGridV2DefaultDivider {
+        ...kplKeyValueGridV2DefaultDivider __typename
+    }
+...on KPLKeyValueGridV2NoneDivider {
+        ...kplKeyValueGridV2NoneDivider __typename
+    }
+    __typename
+}
+fragment kplKeyValueGridV2DefaultDivider on KPLKeyValueGridV2DefaultDivider {
+    nothing __typename
+}
+fragment kplKeyValueGridV2NoneDivider on KPLKeyValueGridV2NoneDivider {
+    nothing __typename
+}
+fragment kplLineGraphView on KPLLineGraphView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    lineGraphDataSets {
+        ...kplLineGraphDataSet __typename
+    }
+    xAxisLabels {
+        ...kplLineGraphAxisLabel __typename
+    }
+    yAxisLabels {
+        ...kplLineGraphAxisLabel __typename
+    }
+    showLegend __typename
+}
+fragment kplLineGraphDataSet on KPLLineGraphDataSet {
+    dataPoints {
+        ...kplLineGraphDataPoint __typename
+    }
+    legendLabel __typename
+}
+fragment kplLineGraphDataPoint on KPLLineGraphDataPoint {
+    xValue yValue xValueLabel yValueLabel __typename
+}
+fragment kplLineGraphAxisLabel on KPLLineGraphAxisLabel {
+    label value __typename
+}
+fragment kplListView on KPLListView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    listItems {
+        ...kplListViewItem __typename
+    }
+    detailItemStriping __typename
+}
+fragment kplListViewItem on KPLListViewItem {
+    ...on KPLListViewBulletedItem {
+        ...kplListViewBulletedItem __typename
+    }
+...on KPLListViewIconItem {
+        ...kplListViewIconItem __typename
+    }
+...on KPLListViewNumberedItem {
+        ...kplListViewNumberedItem __typename
+    }
+...on KPLListViewDetailItem {
+        ...kplListViewDetailItem __typename
+    }
+    __typename
+}
+fragment kplListViewBulletedItem on KPLListViewBulletedItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    bulletColor __typename
+}
+fragment kplListViewIconItem on KPLListViewIconItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    icon {
+        ...basicClientImage __typename
+    }
+    iconColor __typename
+}
+fragment kplListViewNumberedItem on KPLListViewNumberedItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    numberColor __typename
+}
+fragment kplListViewDetailItem on KPLListViewDetailItem {
+    title {
+        ...formattedTextInfo __typename
+    }
+    value {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplMeterView on KPLMeterView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    meterLabel {
+        ...formattedTextInfo __typename
+    }
+    meterValueLabel {
+        ...formattedTextInfo __typename
+    }
+    meterDescription {
+        ...formattedTextInfo __typename
+    }
+    meterBar {
+        ...on KPLSingleValueMeter {
+            ...kplSingleValueMeter __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplSingleValueMeter on KPLSingleValueMeter {
+    meterMaxValue meterCurrentValue accessibleDescription __typename
+}
+fragment kplMetricView on KPLMetricView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    metricStatement metricValue metricBackgroundColor metricIsValueFirst __typename
+}
+fragment kplNoticeView on KPLNoticeView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    dismissData {
+        ...fabricDismissData __typename
+    }
+    noticeTitle {
+        ...formattedTextInfo __typename
+    }
+    noticeDescription {
+        ...formattedTextInfo __typename
+    }
+    noticeStatusIcon {
+        ...basicClientImage __typename
+    }
+    noticeTheme {
+        noticeThemeType noticeCustomTheme {
+            backgroundColor textColor accessibleDescription __typename
+        }
+        __typename
+    }
+    actions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplParagraphView on KPLParagraphView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    paragraphText {
+        ...formattedTextInfo __typename
+    }
+    paragraphBackgroundColor paragraphType __typename
+}
+fragment kplPartialTakeoverView on KPLPartialTakeoverView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    partialTakeoverTitle {
+        ...formattedTextInfo __typename
+    }
+    partialTakeoverDescription {
+        ...formattedTextInfo __typename
+    }
+    partialTakeoverButtonGroup {
+        ...kplButtonGroup __typename
+    }
+    partialTakeoverOverlayTracking {
+        ...kplOverlay __typename
+    }
+    __typename
+}
+fragment kplRatingView on KPLRatingView {
+    rating ratingSize ratingText {
+        ...formattedTextInfo __typename
+    }
+    accessibleDescription __typename
+}
+fragment kplRouterView on KPLRouterView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    routerLayout routerEntries {
+        ...kplRouterEntryView __typename
+    }
+    routerEntryTitlesNumberOfLinesToShow __typename
+}
+fragment kplRouterEntryView on KPLRouterEntryView {
+    destination {
+        ...destinationInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    routerEntryImage {
+        ...basicClientImage __typename
+    }
+    routerEntryImageSize routerEntryTitle {
+        ...formattedTextInfo __typename
+    }
+    routerEntryImageBackgroundColor __typename
+}
+fragment kplRowView on KPLRowView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    rowTitle {
+        ...formattedTextInfo __typename
+    }
+    rowPrimaryImage {
+        ...basicClientImage __typename
+    }
+    rowValue {
+        ...formattedTextInfo __typename
+    }
+    rowStatusDot {
+        ...kplStatusDotView __typename
+    }
+    disabled impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    rowTheme {
+        imageSize __typename
+    }
+    actions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplSectionHeaderView on KPLSectionHeaderView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    sectionTitle {
+        ...formattedTextInfo __typename
+    }
+    sectionSubtitle {
+        ...formattedTextInfo __typename
+    }
+    headerActionButton {
+        ...basicClientButton __typename
+    }
+    kplButton {
+        ...kplButtonView __typename
+    }
+    forceShowSectionDivider __typename
+}
+fragment kplSegmentedChoiceView on KPLSegmentedChoiceView {
+    segmentedChoices {
+        value clickEvent {
+            ...clickEventInfo __typename
+        }
+        choiceTitle {
+            ...formattedTextInfo __typename
+        }
+        default __typename
+    }
+    segmentedChoiceOrientation interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    __typename
+}
+fragment kplSingleMessagePage on KPLSingleMessagePage {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    pageContent {
+        ...on KPLSingleMessagePageImageView {
+            ...kplSingleMessagePageImageView __typename
+        }
+...on KPLSingleMessagePageLoadingView {
+            ...kplSingleMessagePageLoadingView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplSingleMessagePageImageView on KPLSingleMessagePageImageView {
+    imageContent {
+        ...kplSingleMessagePageImageContent __typename
+    }
+    __typename
+}
+fragment kplSingleMessagePageLoadingView on KPLSingleMessagePageLoadingView {
+    loadingContent {
+        ...kplSingleMessagePageLoadingContent __typename
+    }
+    errorContent {
+        ...kplSingleMessagePageImageContent __typename
+    }
+    __typename
+}
+fragment kplSingleMessagePageImageContent on KPLSingleMessagePageImageContent {
+    contentImage {
+        ...basicClientImage __typename
+    }
+    contentTitle {
+        ...formattedTextInfo __typename
+    }
+    contentDescription {
+        ...kplParagraphView __typename
+    }
+    __typename
+}
+fragment kplSingleMessagePageLoadingContent on KPLSingleMessagePageLoadingContent {
+    contentTitle {
+        ...formattedTextInfo __typename
+    }
+    contentDescriptions {
+        ...formattedTextInfo __typename
+    }
+    cycleTime timeoutTime __typename
+}
+fragment kplSocialSecurityInputView on KPLSocialSecurityInputView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    kplSocialSecurityDisplayOption: displayOption securityMessage {
+        ...formattedTextInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    disabled __typename
+}
+fragment kplStatusDotView on KPLStatusDotView {
+    statusDotText {
+        ...formattedTextInfo __typename
+    }
+    statusDotColor statusDotTheme __typename
+}
+fragment kplStepperView on KPLStepperView {
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    disabled stepper {
+        ...on KPLSimplifiedIntStepper {
+            ...kplSimplifiedIntStepper __typename
+        }
+...on KPLEditableStepper {
+            ...kplEditableStepper __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplSimplifiedIntStepper on KPLSimplifiedIntStepper {
+    simplifiedIntStepperInitialValue simplifiedIntStepperStepValue __typename
+}
+fragment kplEditableStepper on KPLEditableStepper {
+    editableStepperInitialValue editableStepperStepValue editableStepperIcon {
+        ...basicClientImage __typename
+    }
+    __typename
+}
+fragment kplSwimlaneCardView on KPLSwimlaneCardView {
+    destination {
+        ...destinationInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    swimlaneCardImage {
+        ...basicClientImage __typename
+    }
+    swimlaneCardTitle {
+        ...formattedTextInfo __typename
+    }
+    swimlaneCardDescription {
+        ...formattedTextInfo __typename
+    }
+    swimlaneCardImageBackgroundColor swimlaneCardImageTheme {
+        orientation __typename
+    }
+    trackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment kplSwitchView on KPLSwitchView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled switchState __typename
+}
+fragment kplTextAreaView on KPLTextAreaView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    value placeholder disabled maxCharacters textRows __typename
+}
+fragment kplTextInputView on KPLTextInputView {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled value placeholder impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    textInputIcon {
+        textInputIconImage {
+            ...basicClientImage __typename
+        }
+        textInputIconAlignment __typename
+    }
+    __typename
+}
+fragment kplTimelineView on KPLTimelineView {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    timelineEvents {
+        ...kplTimelineEvent __typename
+    }
+    timelineType disabled __typename
+}
+fragment kplTimelineEvent on KPLTimelineEvent {
+    title {
+        ...formattedTextInfo __typename
+    }
+    metadata {
+        ...formattedTextInfo __typename
+    }
+    description {
+        ...formattedTextInfo __typename
+    }
+    status buttonText impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    accessibleDescription accessibleHint __typename
+}
+fragment kplToggleChipView on KPLToggleChipView {
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    disabled toggleChips {
+        ...kplToggleChip __typename
+    }
+    __typename
+}
+fragment kplToggleChip on KPLToggleChip {
+    value text active disabled clickEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplPinnedButtonGroup on KPLPinnedButtonGroup {
+    pinnedButtonGroup {
+        ...kplButtonGroup __typename
+    }
+    __typename
+}
+fragment kplPinnedButtonParagraphGroup on KPLPinnedButtonParagraphGroup {
+    pinnedButtonParagraphGroup {
+        ...kplButtonParagraphGroup __typename
+    }
+    __typename
+}
+fragment kplBenefitPillarGroup on KPLBenefitPillarGroup {
+    benefitPillarViews {
+        ...kplBenefitPillarView __typename
+    }
+    __typename
+}
+fragment kplButtonGroup on KPLButtonGroup {
+    buttonGroupViews {
+        ...kplButtonView __typename
+    }
+    buttonGroupOrientation __typename
+}
+fragment kplButtonParagraphGroup on KPLButtonParagraphGroup {
+    buttonParagraphGroupViews {
+        ...on KPLButtonView {
+            ...kplButtonView __typename
+        }
+...on KPLParagraphView {
+            ...kplParagraphView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplCheckboxGroup on KPLCheckboxGroup {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled checkboxOptions {
+        ...kplCheckboxOption __typename
+    }
+    __typename
+}
+fragment kplCheckboxOption on KPLCheckboxOption {
+    displayText {
+        ...formattedTextInfo __typename
+    }
+    key
+    default clickEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplRadioButtonGroup on KPLRadioButtonGroup {
+    interactive {
+        ...kplInteractive __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    label {
+        ...kplFormFieldLabelView __typename
+    }
+    disabled radioButtonOptions {
+        ...kplRadioButtonOption __typename
+    }
+    __typename
+}
+fragment kplRadioButtonOption on KPLRadioButtonOption {
+    displayText {
+        ...formattedTextInfo __typename
+    }
+    key
+    default clickEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplSwimlaneGroup on KPLSwimlaneGroup {
+    swimlaneGroupViews {
+        ...on KPLSwimlaneCardView {
+            ...kplSwimlaneCardView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplDefaultHeader on KPLDefaultHeader {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    defaultHeaderTitle {
+        ...formattedTextInfo __typename
+    }
+    defaultHeaderBackButtonTheme defaultHeaderBackButtonClickEvent {
+        ...clickEventInfo __typename
+    }
+    defaultHeaderBackButton {
+        ...kplButtonView __typename
+    }
+    defaultHeaderTheme defaultHeaderActionButtons {
+        ...on KPLIconButtonView {
+            ...kplIconButtonView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplHeroImageHeader on KPLHeroImageHeader {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    heroImageHeaderTitle {
+        ...formattedTextInfo __typename
+    }
+    heroImageHeaderBackButtonTheme heroImageHeaderBackButtonClickEvent {
+        ...clickEventInfo __typename
+    }
+    heroImageHeaderImage {
+        ...basicClientImage __typename
+    }
+    heroImageHeaderDescription {
+        ...formattedTextInfo __typename
+    }
+    heroImageHeaderBackgroundColor heroImageHeaderTheme heroImageHeaderThemeV2 {
+        ...kplHeroImageHeaderThemeV2 __typename
+    }
+    heroImageHeaderActionButtons {
+        ...on KPLIconButtonView {
+            ...kplIconButtonView __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment kplHeroImageHeaderThemeV2 on KPLHeroImageHeaderThemeV2 {
+    imageTheme {
+        ...kplHeroImageHeaderImageTheme __typename
+    }
+    backgroundTheme {
+        ...kplHeroImageHeaderBackgroundTheme __typename
+    }
+    iconTheme {
+        ...kplHeroImageHeaderIconTheme __typename
+    }
+    __typename
+}
+fragment kplHeroImageHeaderImageTheme on IKPLHeroImageHeaderImageTheme {
+    ...on KPLHeroImageHeaderImageSimpleTheme {
+        ...kplHeroImageHeaderImageSimpleTheme __typename
+    }
+    __typename
+}
+fragment kplHeroImageHeaderImageSimpleTheme on KPLHeroImageHeaderImageSimpleTheme {
+    simpleImageTheme __typename
+}
+fragment kplHeroImageHeaderBackgroundTheme on IKPLHeroImageHeaderBackgroundTheme {
+    ...on KPLHeroImageHeaderSimpleBackgroundTheme {
+        ...kplHeroImageHeaderSimpleBackgroundTheme __typename
+    }
+    __typename
+}
+fragment kplHeroImageHeaderSimpleBackgroundTheme on KPLHeroImageHeaderSimpleBackgroundTheme {
+    simpleBackgroundTheme __typename
+}
+fragment kplHeroImageHeaderIconTheme on IKPLHeroImageHeaderIconTheme {
+    ...on KPLHeroImageHeaderSimpleIconTheme {
+        ...kplHeroImageHeaderSimpleIconTheme __typename
+    }
+    __typename
+}
+fragment kplHeroImageHeaderSimpleIconTheme on KPLHeroImageHeaderSimpleIconTheme {
+    initialIconColor __typename
+}
+fragment kplHeroNumberHeader on KPLHeroNumberHeader {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    heroNumberHeaderTitle {
+        ...formattedTextInfo __typename
+    }
+    heroNumberHeaderTitleView {
+        ...kplHeroNumberHeaderTitleView __typename
+    }
+    heroNumberHeaderBackButtonTheme heroNumberHeaderBackButtonClickEvent {
+        ...clickEventInfo __typename
+    }
+    heroNumberHeaderNumber {
+        ...formattedTextInfo __typename
+    }
+    heroNumberHeaderBackButton {
+        ...kplButtonView __typename
+    }
+    heroNumberHeaderActionButtons {
+        ...on KPLIconButtonView {
+            ...kplIconButtonView __typename
+        }
+        __typename
+    }
+    heroNumberHeaderDescriptorView {
+        ...kplHeroNumberHeaderDescriptorView __typename
+    }
+    accessibleDescription __typename
+}
+fragment kplHeroNumberHeaderTitleView on KPLHeroNumberHeaderTitleView {
+    ...on FormattedText {
+        ...formattedTextInfo __typename
+    }
+...on KPLInformationDisclosureView {
+        ...kplInformationDisclosureView __typename
+    }
+    __typename
+}
+fragment kplHeroNumberHeaderDescriptorView on KPLHeroNumberHeaderDescriptorView {
+    ...on FormattedText {
+        ...formattedTextInfo __typename
+    }
+...on KPLChangeIndicator {
+        ...kplChangeIndicator __typename
+    }
+    __typename
+}
+fragment fabricCustomSpacingValues on FabricCustomSpacingValues {
+    top right bottom left __typename
+}
+fragment fabricCustomSpacingPreset on FabricCustomSpacingPreset {
+    spacingPreset __typename
+}
+fragment fabricCustomSpacing on FabricCustomSpacing {
+    ...on FabricCustomSpacingValues {
+        ...fabricCustomSpacingValues __typename
+    }
+...on FabricCustomSpacingPreset {
+        ...fabricCustomSpacingPreset __typename
+    }
+    __typename
+}
+fragment kplInteractive on KPLInteractive {
+    groupId componentId __typename
+}
+fragment kplMetadata on KPLMetadata {
+    ...on KPLInteractiveForm {
+        ...kplInteractiveForm __typename
+    }
+...on KPLTrackingMetadata {
+        ...kplTrackingMetadata __typename
+    }
+    __typename
+}
+fragment kplOverlay on KPLOverlay {
+    clickEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplTrackingMetadata on KPLTrackingMetadata {
+    portalId surfaceId __typename
+}
+fragment kplInteractiveForm on KPLInteractiveForm {
+    formId responseType tags {
+        ...kplInteractiveFormTag __typename
+    }
+    signature {
+        ...kplInteractiveFormSignature __typename
+    }
+    __typename
+}
+fragment kplInteractiveFormSignature on KPLInteractiveFormSignature {
+    version signedHashValue __typename
+}
+fragment kplDelaySubmission on KPLDelaySubmission {
+    delayMillis __typename
+}
+fragment kplBlockingSubmission on KPLBlockingSubmission {
+    disableBlocking __typename
+}
+fragment kplInteractiveFormComponentData on KPLInteractiveFormComponentData {
+    formId tags {
+        ...kplInteractiveFormTag __typename
+    }
+    submission {
+        ...on KPLDelaySubmission {
+            ...kplDelaySubmission __typename
+        }
+...on KPLBlockingSubmission {
+            ...kplBlockingSubmission __typename
+        }
+        __typename
+    }
+    validators {
+        ...on KPLNumericRangeValidator {
+            ...kplNumericRangeValidator __typename
+        }
+...on KPLPatternValidator {
+            ...kplPatternValidator __typename
+        }
+...on KPLRequiredValidator {
+            ...kplRequiredValidator __typename
+        }
+...on KPLStringLengthValidator {
+            ...kplStringLengthValidator __typename
+        }
+...on IKPLValidator {
+            priority errorMessage __typename
+        }
+        __typename
+    }
+    onSuccessSubmissionActions {
+        ...kplActionType __typename
+    }
+    onErrorSubmissionActions {
+        ...kplActionType __typename
+    }
+    __typename
+}
+fragment kplInteractiveFormTag on KPLInteractiveFormTag {
+    key value __typename
+}
+fragment fabricTakeoverV2 on FabricTakeoverV2 {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    metadata {
+        ...on KPLMetadata {
+            ...kplMetadata __typename
+        }
+        __typename
+    }
+    fabricTakeoverContents {
+        ...fabricTakeoverContents __typename
+    }
+    takeoverOnDismissalClickEvent {
+        ...clickEventInfo __typename
+    }
+    takeoverOnDismissalActions {
+        ...kplActionType __typename
+    }
+    addDefaultDismissPinnedContent isVisibleByDefault takeoverType __typename
+}
+fragment fabricTakeoverContents on FabricTakeoverContents {
+    fabricTakeoverContentType content {
+        ...uTakeoverContent __typename
+    }
+    __typename
+}
+fragment uTakeoverContent on UTakeoverContent {
+    ...on KPLViewTypeAny {
+        ...kplViewTypeAny __typename
+    }
+...on FabricComposableRootAny {
+        ...fabricComposableRoot __typename
+    }
+    __typename
+}
+fragment fabricComposableRoot on FabricComposableRootAny {
+    composableRoot {
+        ...baseComposableRoot __typename
+    }
+    __typename
+}
+fragment baseComposableRoot on BaseComposableRoot {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    composableRootViewId composableRootViews {
+        ...on FabricComposableHStack {
+            ...fabricComposableHStack __typename
+        }
+...on FabricComposableVStack {
+            ...fabricComposableVStack __typename
+        }
+...on FabricComposableContainer {
+            ...fabricComposableContainer __typename
+        }
+...on FabricComposableClickableContainer {
+            ...fabricComposableClickableContainer __typename
+        }
+...on FabricComposableImage {
+            ...fabricComposableImage __typename
+        }
+...on FabricComposableButton {
+            ...fabricComposableButton __typename
+        }
+...on FabricComposableFormattedText {
+            ...fabricComposableFormattedText __typename
+        }
+        __typename
+    }
+    __typename
+}
+fragment fabricComposableSpacingFixed on FabricComposableSpacingFixed {
+    composableSpacing __typename
+}
+fragment fabricComposableSpacingEven on FabricComposableSpacingEven {
+    nothing __typename
+}
+fragment fabricDataVisualizationGroup on FabricDataVisualizationGroup {
+    dataVisualizationGroupDataSets {
+        ...fabricDataVisualizationGroupDataSet __typename
+    }
+    dataVisualizationGroupPeriodSelectorOptions {
+        ...kplPeriodSelectorOption __typename
+    }
+    dataVisualizationGroupLegendTheme {
+        ...fabricDataVisualizationLegendTheme __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    dataVizActionMetadata {
+        ...dataVizActionMetadata __typename
+    }
+    __typename
+}
+fragment fabricDataVisualizationGroupDataSet on FabricDataVisualizationGroupDataSet {
+    dataSetKey dataVisualizationDataSet {
+        ...kplDataVisualizationDataSet __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    __typename
+}
+fragment kplDataVisualizationDataSet on KPLDataVisualizationDataSet {
+    ...on KPLLineGraphV2DataSet {
+        ...kplLineGraphV2DataSet __typename
+    }
+...on KPLSegmentedMeterDataSet {
+        ...kplSegmentedMeterDataSet __typename
+    }
+...on KPLBarChartDataset {
+        ...kplBarChartDataset __typename
+    }
+...on EmptyDataVisualizationDataSet {
+        ...emptyDataVisualizationDataSet __typename
+    }
+    __typename
+}
+fragment emptyDataVisualizationDataSet on EmptyDataVisualizationDataSet {
+    emptyDataTitle: title {
+        ...formattedTextInfo __typename
+    }
+    emptyDataMessage: message {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment fabricDataVisualizationLegendTheme on IFabricDataVizGroupLegendTheme {
+    ...on FabricDataVisualizationVerticalLegendTheme {
+        ...fabricDataVisualizationVerticalLegendTheme __typename
+    }
+...on FabricDataVisualizationHorizontalLegendTheme {
+        fabricDataVizGroupLegendThemeMarker __typename
+    }
+    __typename
+}
+fragment fabricDataVisualizationVerticalLegendTheme on FabricDataVisualizationVerticalLegendTheme {
+    dataVizLegendShowValue __typename
+}
+fragment kplAxisGroup on KPLAxisGroup {
+    axisGroupXAxis {
+        ...kplXAxis __typename
+    }
+    axisGroupYAxis {
+        ...kplYAxis __typename
+    }
+    __typename
+}
+fragment kplXAxis on KPLXAxis {
+    axisName {
+        ...formattedTextInfo __typename
+    }
+    axisGridLineStyle {
+        ...kplAxisGridLineStyle __typename
+    }
+    axisRange {
+        ...kplAxisRange __typename
+    }
+    axisValueFormatter {
+        ...kplAxisValueFormatter __typename
+    }
+    axisLabels {
+        ...kplAxisLabel __typename
+    }
+    axisPosition __typename
+}
+fragment kplYAxis on KPLYAxis {
+    axisName {
+        ...formattedTextInfo __typename
+    }
+    axisGridLineStyle {
+        ...kplAxisGridLineStyle __typename
+    }
+    axisRange {
+        ...kplAxisRange __typename
+    }
+    axisValueFormatter {
+        ...kplAxisValueFormatter __typename
+    }
+    axisLabels {
+        ...kplAxisLabel __typename
+    }
+    axisPosition __typename
+}
+fragment kplAxisLabel on KPLAxisLabel {
+    value label __typename
+}
+fragment kplAxisValueFormatter on KPLAxisValueFormatter {
+    ...on KPLAxisValueCurrencyFormatter {
+        ...kplAxisValueCurrencyFormatter __typename
+    }
+...on KPLAxisValueCustomFormatter {
+        ...kplAxisValueCustomFormatter __typename
+    }
+    __typename
+}
+fragment kplAxisValueCurrencyFormatter on KPLAxisValueCurrencyFormatter {
+    minSignificantDigits maxSignificantDigits __typename
+}
+fragment kplAxisValueCustomFormatter on KPLAxisValueCustomFormatter {
+    labels {
+        ...kplAxisCustomFormatterLabel __typename
+    }
+    __typename
+}
+fragment kplAxisCustomFormatterLabel on KPLAxisCustomFormatterLabel {
+    value label {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplAxisRange on KPLAxisRange {
+    minValue maxValue __typename
+}
+fragment kplAxisGridLineStyle on KPLAxisGridLineStyle {
+    lineColor __typename
+}
+fragment kplBarChart on KPLBarChart {
+    barChartDataSet {
+        ...kplBarChartDataset __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    __typename
+}
+fragment kplBarChartDataset on KPLBarChartDataset {
+    barChartAxisGroup {
+        ...kplAxisGroup __typename
+    }
+    barChartData {
+        ...kplBarData __typename
+    }
+    showBarLabels __typename
+}
+fragment kplBarData on KPLBarData {
+    ...on KPLSingleBarSeries {
+        ...kplSingleBarSeries __typename
+    }
+...on KPLGroupedBarSeries {
+        ...kplGroupedBarSeries __typename
+    }
+...on KPLStackedBarSeries {
+        ...kplStackedBarSeries __typename
+    }
+    __typename
+}
+fragment kplBarSeries on KPLBarSeries {
+    barSeriesName {
+        ...formattedTextInfo __typename
+    }
+    barSeriesColor barData {
+        ...kplSingleBar __typename
+    }
+    __typename
+}
+fragment kplSingleBarSeries on KPLSingleBarSeries {
+    singleBarSeries {
+        ...kplBarSeries __typename
+    }
+    negativeOverride {
+        ...kplBarNegativeOverrideStyle __typename
+    }
+    __typename
+}
+fragment kplBarNegativeOverrideStyle on KPLBarNegativeOverrideStyle {
+    negativeOverrideName {
+        ...formattedTextInfo __typename
+    }
+    negativeColorOverride __typename
+}
+fragment kplGroupedBarSeries on KPLGroupedBarSeries {
+    groupedBarsSeries {
+        ...kplBarSeries __typename
+    }
+    __typename
+}
+fragment kplStackedBarSeries on KPLStackedBarSeries {
+    stackedBarsSeries {
+        ...kplBarSeries __typename
+    }
+    stackedBarsLabels {
+        ...kplStackedBarLabel __typename
+    }
+    __typename
+}
+fragment kplStackedBarLabel on KPLStackedBarLabel {
+    xValue yValueLabel {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplSingleBar on KPLSingleBar {
+    xValue yValue yValueLabel {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplGaugeChart on KPLGaugeChart {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    gaugeChartDataSet {
+        ...kplGaugeChartDataSet __typename
+    }
+    __typename
+}
+fragment kplGaugeChartDataSet on KPLGaugeChartDataSet {
+    gaugeChartTheme {
+        ...kplGaugeChartTheme __typename
+    }
+    gaugeChartSegments {
+        ...kplGaugeChartSegments __typename
+    }
+    gaugeChartLabelItem {
+        ...kplKeyValueItem __typename
+    }
+    gaugeChartMinValue gaugeChartMarkerValue __typename
+}
+fragment kplGaugeChartSegments on KPLGaugeChartSegment {
+    maxValue color __typename
+}
+fragment kplGaugeChartTheme on KPLGaugeChartTheme {
+    gaugeChartStyle gaugeChartSize __typename
+}
+fragment kplLegend on KPLLegend {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    legendItems {
+        ...kplLegendItem __typename
+    }
+    legendOrientation __typename
+}
+fragment kplLegendItem on KPLLegendItem {
+    itemName {
+        ...formattedTextInfo __typename
+    }
+    value {
+        ...formattedTextInfo __typename
+    }
+    color __typename
+}
+fragment kplLineGraphViewV2 on KPLLineGraphViewV2 {
+    lineGraphDataSet {
+        ...kplLineGraphV2DataSet __typename
+    }
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    __typename
+}
+fragment kplLineGraphV2DataSet on KPLLineGraphV2DataSet {
+    axes {
+        ...kplAxisGroup __typename
+    }
+    lines {
+        ...kplLineGraphV2LineData __typename
+    }
+    __typename
+}
+fragment kplLineGraphV2LineStyle on KPLLineGraphV2LineStyle {
+    lineColor fillColor __typename
+}
+fragment kplLineGraphV2LineData on KPLLineGraphV2LineData {
+    points {
+        ...kplLineGraphV2DataPoint __typename
+    }
+    style {
+        ...kplLineGraphV2LineStyle __typename
+    }
+    drawMode lineName {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplLineGraphV2DataPoint on KPLLineGraphV2DataPoint {
+    xValue xValueLabel {
+        ...formattedTextInfo __typename
+    }
+    yValue yValueLabel {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplPeriodSelector on KPLPeriodSelector {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    disabled periodSelectorOptions {
+        ...kplPeriodSelectorOption __typename
+    }
+    __typename
+}
+fragment kplPeriodSelectorOption on KPLPeriodSelectorOption {
+    key displayText {
+        ...formattedTextInfo __typename
+    }
+    default disabled clickEvent {
+        ...clickEventInfo __typename
+    }
+    __typename
+}
+fragment kplSegmentedMeter on KPLSegmentedMeter {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    segmentedMeterDataset {
+        ...kplSegmentedMeterDataSet __typename
+    }
+    __typename
+}
+fragment kplSegmentedMeterDataSet on KPLSegmentedMeterDataSet {
+    segments {
+        ...kplSegmentedMeterSegment __typename
+    }
+    segmentedMeterTitle: title {
+        ...formattedTextInfo __typename
+    }
+    segmentedMeterValue: value {
+        ...formattedTextInfo __typename
+    }
+    size __typename
+}
+fragment kplSegmentedMeterSegment on KPLSegmentedMeterSegment {
+    value color segmentName {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment kplSparkLine on KPLSparkLine {
+    interactive {
+        ...kplInteractive __typename
+    }
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    sparkLineData {
+        ...kplLineGraphV2LineData __typename
+    }
+    sparkLineSize __typename
+}
+fragment kplNumericRangeValidator on KPLNumericRangeValidator {
+    priority errorMessage minimumValue maximumValue __typename
+}
+fragment kplPatternValidator on KPLPatternValidator {
+    priority errorMessage pattern __typename
+}
+fragment kplRequiredValidator on KPLRequiredValidator {
+    priority errorMessage __typename
+}
+fragment kplStringLengthValidator on KPLStringLengthValidator {
+    priority errorMessage minimumLength maximumLength __typename
+}
+fragment fabricComposableClickableContainer on FabricComposableClickableContainer {
+    composableId clickEvent {
+        ...clickEventInfo __typename
+    }
+    destination {
+        ...destinationInfo __typename
+    }
+    accessibleDescription accessibleHint composableClickableContainerModifiers {
+        ...fabricComposableClickableContainerModifier __typename
+    }
+    composableClickableContainerChildId actions {
+        ...kplActionType __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    __typename
+}
+fragment fabricComposableClickableContainerModifier on FabricComposableClickableContainerModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+    __typename
+}
+fragment fabricComposableContainer on FabricComposableContainer {
+    composableId composableContainerHorizontalAlignment composableContainerVerticalAlignment composableContainerModifiers {
+        ...fabricComposableContainerModifier __typename
+    }
+    composableContainerChildId __typename
+}
+fragment fabricComposableContainerModifier on FabricComposableContainerModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+...on FabricComposableViewModifierAny {
+        ...fabricComposableViewModifierAny __typename
+    }
+...on FabricComposableContentModifierAny {
+        ...fabricComposableContentModifierAny __typename
+    }
+    __typename
+}
+fragment fabricComposableHStack on FabricComposableHStack {
+    composableId composableHStackSpacing {
+        ...fabricComposableHStackSpacing __typename
+    }
+    composableHStackAlignment composableHStackModifiers {
+        ...fabricComposableHStackModifier __typename
+    }
+    composableHStackChildren __typename
+}
+fragment fabricComposableHStackModifier on FabricComposableHStackModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+...on FabricComposableViewModifierAny {
+        ...fabricComposableViewModifierAny __typename
+    }
+    __typename
+}
+fragment fabricComposableHStackSpacing on FabricComposableHStackSpacing {
+    ...on FabricComposableSpacingFixed {
+        ...fabricComposableSpacingFixed __typename
+    }
+...on FabricComposableSpacingEven {
+        ...fabricComposableSpacingEven __typename
+    }
+    __typename
+}
+fragment fabricComposableVStack on FabricComposableVStack {
+    composableId composableVStackSpacing {
+        ...fabricComposableVStackSpacing __typename
+    }
+    composableVStackAlignment composableVStackModifiers {
+        ...fabricComposableVStackModifier __typename
+    }
+    composableVStackChildren __typename
+}
+fragment fabricComposableVStackModifier on FabricComposableVStackModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+...on FabricComposableViewModifierAny {
+        ...fabricComposableViewModifierAny __typename
+    }
+    __typename
+}
+fragment fabricComposableVStackSpacing on FabricComposableVStackSpacing {
+    ...on FabricComposableSpacingFixed {
+        ...fabricComposableSpacingFixed __typename
+    }
+...on FabricComposableSpacingEven {
+        ...fabricComposableSpacingEven __typename
+    }
+    __typename
+}
+fragment fabricComposableBackgroundColor on FabricComposableBackgroundColor {
+    backgroundColor {
+        ...fabricComposableColor __typename
+    }
+    __typename
+}
+fragment fabricComposableBorderAny on FabricComposableBorderAny {
+    border {
+        ...fabricComposableBorder __typename
+    }
+    __typename
+}
+fragment fabricComposableBorder on FabricComposableBorder {
+    ...on FabricComposableBorderKPL {
+        ...fabricComposableBorderKPL __typename
+    }
+...on FabricComposableBorderCustom {
+        ...fabricComposableBorderCustom __typename
+    }
+    __typename
+}
+fragment fabricComposableBorderKPL on FabricComposableBorderKPL {
+    nothing __typename
+}
+fragment fabricComposableBorderCustom on FabricComposableBorderCustom {
+    width color {
+        ...fabricComposableColor __typename
+    }
+    __typename
+}
+fragment fabricComposableButtonTheme on FabricComposableButtonTheme {
+    backgroundColorNormal {
+        ...fabricComposableColor __typename
+    }
+    backgroundColorHighlighted {
+        ...fabricComposableColor __typename
+    }
+    backgroundColorDisabled {
+        ...fabricComposableColor __typename
+    }
+    borderWidth borderColorNormal {
+        ...fabricComposableColor __typename
+    }
+    borderColorHighlighted {
+        ...fabricComposableColor __typename
+    }
+    borderColorDisabled {
+        ...fabricComposableColor __typename
+    }
+    textColorNormal {
+        ...fabricComposableColor __typename
+    }
+    textColorHighlighted {
+        ...fabricComposableColor __typename
+    }
+    textColorDisabled {
+        ...fabricComposableColor __typename
+    }
+    __typename
+}
+fragment fabricComposableColor on FabricComposableColor {
+    ...on FabricComposableColorKPL {
+        ...fabricComposableColorKPL __typename
+    }
+...on FabricComposableColorRGBA {
+        ...fabricComposableColorRGBA __typename
+    }
+    __typename
+}
+fragment fabricComposableColorKPL on FabricComposableColorKPL {
+    color __typename
+}
+fragment fabricComposableColorRGBA on FabricComposableColorRGBA {
+    lightMode darkMode __typename
+}
+fragment horizontalContentScaling on HorizontalContentScaling {
+    horizontalScaling: contentScaling {
+        ...contentScaling __typename
+    }
+    __typename
+}
+fragment verticalContentScaling on VerticalContentScaling {
+    verticalScaling: contentScaling {
+        ...contentScaling __typename
+    }
+    __typename
+}
+fragment contentScaling on ContentScaling {
+    ...on ContentScalingNone {
+        ...contentScalingNone __typename
+    }
+...on ContentScalingFixed {
+        ...contentScalingFixed __typename
+    }
+...on ContentScalingRelative {
+        ...contentScalingRelative __typename
+    }
+    __typename
+}
+fragment contentScalingNone on ContentScalingNone {
+    nothing __typename
+}
+fragment contentScalingFixed on ContentScalingFixed {
+    points relation __typename
+}
+fragment contentScalingRelative on ContentScalingRelative {
+    percentage relation __typename
+}
+fragment fabricComposableCornerRadiusAny on FabricComposableCornerRadiusAny {
+    cornerRadius {
+        ...fabricComposableCornerRadius __typename
+    }
+    __typename
+}
+fragment fabricComposableCornerRadius on FabricComposableCornerRadius {
+    ...on FabricComposableCornerRadiusKPL {
+        ...fabricComposableCornerRadiusKPL __typename
+    }
+...on FabricComposableCornerRadiusCustom {
+        ...fabricComposableCornerRadiusCustom __typename
+    }
+    __typename
+}
+fragment fabricComposableCornerRadiusCustom on FabricComposableCornerRadiusCustom {
+    cornerRadius __typename
+}
+fragment fabricComposableCornerRadiusKPL on FabricComposableCornerRadiusKPL {
+    nothing __typename
+}
+fragment fabricComposableInsetsAny on FabricComposableInsetsAny {
+    insets {
+        ...fabricComposableInsets __typename
+    }
+    __typename
+}
+fragment fabricComposableInsets on FabricComposableInsets {
+    ...on FabricComposableInsetsKPL {
+        ...fabricComposableInsetsKPL __typename
+    }
+...on FabricComposableInsetsCustom {
+        ...fabricComposableInsetsCustom __typename
+    }
+    __typename
+}
+fragment fabricComposableInsetsKPL on FabricComposableInsetsKPL {
+    nothing __typename
+}
+fragment fabricComposableInsetsCustom on FabricComposableInsetsCustom {
+    left right top bottom __typename
+}
+fragment fabricComposableKPLInteractive on FabricComposableKPLInteractiveModifier {
+    interactive {
+        ...kplInteractive __typename
+    }
+    __typename
+}
+fragment fabricComposableContentModifierAny on FabricComposableContentModifierAny {
+    modifier {
+        ...fabricComposableContentModifier __typename
+    }
+    __typename
+}
+fragment fabricComposableContentModifier on FabricComposableContentModifier {
+    ...on HorizontalContentScaling {
+        ...horizontalContentScaling __typename
+    }
+...on VerticalContentScaling {
+        ...verticalContentScaling __typename
+    }
+    __typename
+}
+fragment fabricComposableEventModifierAny on FabricComposableEventModifierAny {
+    eventModifier {
+        ...fabricComposableEventModifier __typename
+    }
+    __typename
+}
+fragment fabricComposableEventModifier on FabricComposableEventModifier {
+    ...on FabricComposableImpressionEventModifier {
+        ...fabricComposableImpressionEvent __typename
+    }
+...on FabricComposableKPLInteractiveModifier {
+        ...fabricComposableKPLInteractive __typename
+    }
+    __typename
+}
+fragment fabricComposableImpressionEvent on FabricComposableImpressionEventModifier {
+    impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    __typename
+}
+fragment fabricComposableViewModifierAny on FabricComposableViewModifierAny {
+    viewModifier {
+        ...fabricComposableViewModifier __typename
+    }
+    __typename
+}
+fragment fabricComposableViewModifier on FabricComposableViewModifier {
+    ...on FabricComposableBackgroundColor {
+        ...fabricComposableBackgroundColor __typename
+    }
+...on FabricComposableBorderAny {
+        ...fabricComposableBorderAny __typename
+    }
+...on FabricComposableCornerRadiusAny {
+        ...fabricComposableCornerRadiusAny __typename
+    }
+...on FabricComposableInsetsAny {
+        ...fabricComposableInsetsAny __typename
+    }
+    __typename
+}
+fragment fabricComposableImage on FabricComposableImage {
+    composableId composableImageModel {
+        ...basicClientImage __typename
+    }
+    composableImageModifiers {
+        ...fabricComposableImageModifier __typename
+    }
+    __typename
+}
+fragment fabricComposableImageModifier on FabricComposableImageModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+...on FabricComposableContentModifierAny {
+        ...fabricComposableContentModifierAny __typename
+    }
+    __typename
+}
+fragment fabricComposableButton on FabricComposableButton {
+    composableId composableButtonModel {
+        ...basicClientButton __typename
+    }
+    composableButtonModifiers {
+        ...fabricComposableButtonModifier __typename
+    }
+    actions {
+        ...kplActionType __typename
+    }
+    formData {
+        ...kplInteractiveFormComponentData __typename
+    }
+    __typename
+}
+fragment fabricComposableButtonModifier on FabricComposableButtonModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+...on FabricComposableButtonTheme {
+        ...fabricComposableButtonTheme __typename
+    }
+    __typename
+}
+fragment fabricComposableFormattedText on FabricComposableFormattedText {
+    composableId composableFormattedTextAlignment composableFormattedTextModel {
+        ...formattedTextInfo __typename
+    }
+    composableFormattedTextModifiers {
+        ...fabricComposableFormattedTextModifier __typename
+    }
+    __typename
+}
+fragment fabricComposableFormattedTextModifier on FabricComposableFormattedTextModifier {
+    ...on FabricComposableEventModifierAny {
+        ...fabricComposableEventModifierAny __typename
+    }
+...on FabricComposableContentModifierAny {
+        ...fabricComposableContentModifierAny __typename
+    }
+    __typename
+}
+fragment dataVizActionMetadata on DataVizActionMetadata {
+    ...on KPLChangeIndicatorLineGraphActionMetadata {
+        ...kplChangeIndicatorLineGraphActionMetadata __typename
+    }
+...on KPLChangeIndicatorEmptyGraphActionMetadata {
+        ...kplChangeIndicatorEmptyGraphActionMetadata __typename
+    }
+    __typename
+}
+fragment dataVizActionMetadataFormatter on DataVizActionMetadataFormatter {
+    ...on DataVizActionMetadataCurrencyFormatter {
+        showCents __typename
+    }
+...on DataVizActionMetadataNumberFormatter {
+        decimalDigits __typename
+    }
+    __typename
+}
+fragment graphAxisCoordinate on GraphAxisCoordinate {
+    ...on CustomAxisCoordinate {
+        customAxisCoordinateValue __typename
+    }
+...on LimitAxisCoordinate {
+        limit __typename
+    }
+    __typename
+}
+fragment kplChangeIndicatorEmptyGraphActionMetadata on KPLChangeIndicatorEmptyGraphActionMetadata {
+    sentiment direction value {
+        ...formattedTextInfo __typename
+    }
+    description {
+        ...formattedTextInfo __typename
+    }
+    targetInteractive {
+        ...kplInteractive __typename
+    }
+    sourceInteractive {
+        ...kplInteractive __typename
+    }
+    __typename
+}
+fragment kplChangeIndicatorLineGraphActionMetadata on KPLChangeIndicatorLineGraphActionMetadata {
+    defaultXValueStart {
+        ...graphAxisCoordinate __typename
+    }
+    defaultXValueEnd {
+        ...graphAxisCoordinate __typename
+    }
+    selectedXValueCalculationUsage lineIndex sentimentPositive sentimentNegative sentimentZero defaultDescription {
+        ...formattedTextInfo __typename
+    }
+    descriptionsByXValue {
+        ...kplChangeIndicatorActionXValuesToDescription __typename
+    }
+    valueFormatter {
+        ...dataVizActionMetadataFormatter __typename
+    }
+    targetInteractive {
+        ...kplInteractive __typename
+    }
+    sourceInteractive {
+        ...kplInteractive __typename
+    }
+    __typename
+}
+fragment kplChangeIndicatorActionXValuesToDescription on KPLChangeIndicatorActionXValuesToDescription {
+    xValueMin xValueMax descriptionText {
+        ...formattedTextInfo __typename
+    }
+    __typename
+}
+fragment destinationInfo on Destination {
+    discriminator...on WebDestination {
+        ...webDestinationInfo __typename
+    }
+...on BasicPopupDestination {
+        ...basicPopupDestination __typename
+    }
+...on CKLinkDestination {
+        ...ckLinkDestination __typename
+    }
+...on KPLTakeoverDestination {
+        ...kplTakeoverDestination __typename
+    }
+    __typename
+}
+fragment webDestinationInfo on WebDestination {
+    discriminator url authenticate target __typename
+}
+fragment basicPopupDestination on BasicPopupDestination {
+    discriminator impressionEvent {
+        ...impressionEventInfo __typename
+    }
+    title {
+        ...formattedTextBasicPopUpInfo __typename
+    }
+    body {
+        ...formattedTextBasicPopUpInfo __typename
+    }
+    confirmationButtonTitle __typename
+}
+fragment basicPopUpDestinationInfo on Destination {
+    ...on WebDestination {
+        ...webDestinationInfo __typename
+    }
+    __typename
+}
+fragment ckLinkDestination on CKLinkDestination {
+    discriminator linkTypename ckLinkURL destinationBody metadata {
+        ...ckLinkMetadata __typename
+    }
+    __typename
+}
+fragment ckLinkMetadata on CKLinkMetadata {
+    iosVersion {
+        ...ckLinkMetadataPlatformContraints __typename
+    }
+    androidVersion {
+        ...ckLinkMetadataPlatformContraints __typename
+    }
+    __typename
+}
+fragment ckLinkMetadataPlatformContraints on CKLinkMetadata_PlatformConstraints {
+    ...on CKLinkMetadata_PlatformVersionConstraints {
+        minVersion maxVersion fallback __typename
+    }
+...on CKLinkMetadata_PlatformUnavailable {
+        unavailable __typename
+    }
+    __typename
+}
+fragment kplTakeoverDestination on KPLTakeoverDestination {
+    discriminator groupId componentId __typename
+}
+HEREDOC
+
