@@ -143,3 +143,5 @@ end
 
 out_file_csv.close
 out_file_full_json.close
+
+puts "done"
