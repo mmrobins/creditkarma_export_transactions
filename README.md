@@ -34,7 +34,11 @@ Now do what you want with the `creditkarma_transactions.csv` and `creditkarma_tr
 
 You can get your access token by logging into credit karma, and copying the
 `authorization` header value (minus the word 'Bearer') using the browser's dev
-tools
+tools in the Network section
+
+Here's an example of what the would look like in Chrome's Dev Tools
+
+![image](https://github.com/mmrobins/creditkarma_export_transactions/assets/9961/d990e1ca-0f0d-4101-a115-4e04071218bf)
 
 This token expires after as few minutes (10ish?), so you might have to grab it
 again. You can restart where you left off by setting the `START_CURSOR`
