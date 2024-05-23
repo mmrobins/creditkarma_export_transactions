@@ -68,12 +68,11 @@ Example:
 ```bash
 $ export MY_ACCESS_TOKEN=eyJMyNewtoken
 $ ruby fetch_credit_karma_transactions
-getting next page cursor: dHhuIzIwMjQtMDItMDUjMTg5MDUxMjUxOF8w
 total transactions: 100, last date: 2024-01-10
 ...
 total transactions: 1900, last date: 2023-02-21
 getting next page cursor: dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w
-make_call.rb:42:in `get_transactions': error: 401 body: {"errorCode":"TOKEN_NEEDS_REFRESH"} (RuntimeError)
+fetch_credit_karma_transactions:42:in `get_transactions': error: 401 body: {"errorCode":"TOKEN_NEEDS_REFRESH"} (RuntimeError)
 
 $ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w ruby fetch_credit_karma_transactions
 ```
