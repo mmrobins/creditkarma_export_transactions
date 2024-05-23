@@ -47,6 +47,7 @@ environment variable to the last attempted value
 Example:
 
 ```bash
+$ export MY_ACCESS_TOKEN=eyJMyNewtoken
 $ ./fetch_credit_karma_transactions
 getting next page cursor: dHhuIzIwMjQtMDItMDUjMTg5MDUxMjUxOF8w
 total transactions: 100, last date: 2024-01-10
