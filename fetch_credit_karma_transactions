@@ -30,7 +30,7 @@ end
   ...
   total transactions: 1900, last date: 2023-02-21
   getting next page cursor: dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w
-  make_call.rb:42:in `get_transactions': error: 401 body: {"errorCode":"TOKEN_NEEDS_REFRESH"} (RuntimeError)
+  fetch_credit_karma_transactions.rb:3918:in `get_transactions': error: 401 body: {"errorCode":"TOKEN_NEEDS_REFRESH"} (RuntimeError)
 
   $ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w fetch_credit_karma_transactions
 HEREDOC
@@ -3867,7 +3867,10 @@ fragment kplTakeoverDestination on KPLTakeoverDestination {
 HEREDOC
 
 @access_token = ENV['MY_ACCESS_TOKEN']
-raise @help_message unless @access_token
+unless @access_token
+  puts @help_message
+  raise "No access token (MY_ACCESS_TOKEN) provided"
+end
 
 def get_transactions(after_cursor = nil)
   variables = {
@@ -3902,6 +3905,14 @@ def get_transactions(after_cursor = nil)
   if response.code != '200'
     if response.code == '401'
       puts @help_message
+      puts
+      # obfuscate the token a bit for error reporting
+      obfuscated = ENV['MY_ACCESS_TOKEN']
+      if obfuscated.to_s.size > 10
+        obfuscated = "#{ENV['MY_ACCESS_TOKEN'].to_s[0..5]}...#{ENV['MY_ACCESS_TOKEN'].to_s[-5..-1]}"
+      end
+      puts "401, either MY_ACCESS_TOKEN (#{obfuscated}) was invalid or needs refresh"
+      puts "MY_ACCESS_TOKEN: should look like eyJra...kA2Uh  It'll be pretty long, the ... is just to shorten it for this message"
     end
 
     raise "error: #{response.code} body: #{response.body}"
