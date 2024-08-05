@@ -51,9 +51,11 @@ dumped to the CSV
 
 ## Access Token
 
-You can get your access token by logging into credit karma, and copying the
+You can get your access token by logging into credit karma, visiting https://www.creditkarma.com/networth/transactions, and copying the
 `authorization` header value (minus the word 'Bearer') using the browser's dev
 tools in the Network section
+
+You can get the token from anywhere on the site, but if you have second factor auth (2FA) you might have to visit https://www.creditkarma.com/networth/transactions specifically and make sure you can see transactions before the token will work.
 
 Here's an example of what the would look like in Chrome's Dev Tools
 
