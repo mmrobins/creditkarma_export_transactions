@@ -1,0 +1,10 @@
+version: '3'
+services:
+  ruby:
+    image: ruby:latest
+    command: bash -c "gem install net-http json awesome_print && ruby fetch_credit_karma_transactions"
+    env_file:
+      - ./.env
+    working_dir: /usr/app/
+    volumes:
+      - ./:/usr/app/
