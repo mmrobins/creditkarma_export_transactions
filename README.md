@@ -49,6 +49,19 @@ The JSON file is a verbose dump of the GraphQL API results that creditKarma
 returns, just in case there's data in there that isn't correctly parsed and
 dumped to the CSV
 
+### With Docker
+If you don't have Ruby installed locally or don't want to install the required gems, you can run the script with [Docker](https://docs.docker.com/get-started/get-docker/).
+
+First create a `.env` file in this directory (or rename `sample.env` to `.env`) and add your environment variables (`MY_ACCESS_TOKEN` is the only required one):
+
+```.dotenv
+DEBUG=1
+MY_ACCESS_TOKEN=eyJra...kA2Uh
+START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w
+```
+
+Then, in the terminal, run `docker-compose up`.
+
 ## Access Token
 
 You can get your access token by logging into credit karma, visiting https://www.creditkarma.com/networth/transactions, and copying the
