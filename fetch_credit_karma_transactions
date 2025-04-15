@@ -15,6 +15,9 @@ def debug(msg)
   ap msg if ENV['DEBUG']
 end
 
+export_year = ENV['EXPORT_YEAR'] ? ENV['EXPORT_YEAR'].to_i : nil
+debug "export year: \n\n#{export_year}\n\n" if export_year
+
 @help_message = <<-HEREDOC
   First you'll need to set or update your access token, which you can get from the browser console on the creditkarma site.  See the README for more details with screenshots https://github.com/mmrobins/creditkarma_export_transactions?tab=readme-ov-file#access-token
 
@@ -3943,28 +3946,36 @@ while has_next_page
   resp_data = resp.dig('data', 'prime', 'transactionsHub', 'transactionPage', 'transactions')
   unless resp_data
     puts "expected data not in response: \n\n#{resp}"
-
     puts "If your reponse looks like \n\n"
     puts %q({"data"=>{"prime"=>{"transactionsHub"=>{}}}})
     puts "then you probably need to re-authenticate on the website visiting https://www.creditkarma.com/networth/transaction so that it'll send you a mobile code, apparently https://www.creditkarma.com/today doesn't trigger that auth"
   end
 
-  tra_batch = resp_data.map do |tra|
-    out_file_full_json.puts tra.to_json
+  exit_loop = false
+  tra_batch = []
 
-    desc = tra['description']
+  resp_data.each do |tra|
     date = tra['date']
+    if export_year
+      tx_year = date[0,4].to_i
+      if tx_year < export_year
+        exit_loop = true
+        break
+      elsif tx_year != export_year
+        next
+      end
+    end
+
+    out_file_full_json.puts tra.to_json
+    desc = tra['description']
     status = tra['status']
-
-    # very annoying to not just use negative numbers where it makes sense.  oh well
     tra_type = tra.dig('amount', 'value').negative? ? 'debit' : 'credit'
-    amt = tra.dig('amount','value').abs
-
-    acct = tra.dig('account','name')
+    amt = tra.dig('amount', 'value').abs
+    acct = tra.dig('account', 'name')
     debug "not sure why, but missing account name from the transaction: \n\n#{tra}\n\n" unless acct
-    cat = tra.dig('category','name')
+    cat = tra.dig('category', 'name')
     debug "not sure why, but missing category name from the transaction: \n\n#{tra}\n\n" unless cat
-    merch = tra.dig('merchant','name')
+    merch = tra.dig('merchant', 'name')
     debug "not sure why, but missing merchant name from the transaction: \n\n#{tra}\n\n" unless merch
 
     # https://help.monarchmoney.com/hc/en-us/articles/9163024504468-Exporting-data-from-Mint#h_01HGBPJ7YTJDHZSZEJ4BA2Z511
@@ -3982,13 +3993,18 @@ while has_next_page
       merch: merch
     }
     debug new_tra
-    new_tra
+    tra_batch << new_tra
   end
 
   total_transactions += tra_batch
-  puts "total transactions: #{total_transactions.size}, last date: #{tra_batch.last[:date]}"
+  if exit_loop
+    break
+  end
 
-  page_info = resp['data']['prime']['transactionsHub']['transactionPage']['pageInfo']
+  last_date = tra_batch.last ? tra_batch.last[:date] : "N/A"
+  puts "total transactions: #{total_transactions.size}, last date: #{last_date}"
+
+  page_info = resp.dig('data', 'prime', 'transactionsHub', 'transactionPage', 'pageInfo')
   cursor = page_info['endCursor']
   has_next_page = page_info['hasNextPage']
 end

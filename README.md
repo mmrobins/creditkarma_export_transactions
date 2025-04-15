@@ -96,6 +96,18 @@ fetch_credit_karma_transactions:42:in `get_transactions': error: 401 body: {"err
 $ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w ruby fetch_credit_karma_transactions
 ```
 
+## Exporting just one year
+
+Set the `EXPORT_YEAR` environment variable to the select just one year of data.
+
+This has the advantage of stopping the script from going back a decade or more in addition to just filtering out one year, say, for tax purposes.
+
+Example:
+
+```bash
+$ export EXPORT_YEAR=2024
+`
+
 ## Debugging
 
 Set the env var `DEBUG=1` to see the json entries for each transaction printed
