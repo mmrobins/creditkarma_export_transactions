@@ -3986,11 +3986,16 @@ while has_next_page
   end
 
   total_transactions += tra_batch
-  puts "total transactions: #{total_transactions.size}, last date: #{tra_batch.last[:date]}"
+  if tra_batch != []
+    puts "total transactions: #{total_transactions.size}, last date: #{tra_batch.last[:date]}"
 
-  page_info = resp['data']['prime']['transactionsHub']['transactionPage']['pageInfo']
-  cursor = page_info['endCursor']
-  has_next_page = page_info['hasNextPage']
+    page_info = resp['data']['prime']['transactionsHub']['transactionPage']['pageInfo']
+    cursor = page_info['endCursor']
+    has_next_page = page_info['hasNextPage']
+  else
+    puts "Empty response, ending loop"
+    has_next_page = false
+  end
 end
 
 out_file_csv.close
