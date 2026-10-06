@@ -10,6 +10,38 @@ even for those not too familiar with Ruby.
 I was able to get my transactions that had previously been in Mint all the way
 back to 2008 when I started using it.
 
+## Persisted queries (why you might see a 400)
+
+Credit Karma's GraphQL API no longer accepts a query document. Any request that
+sends query text comes back as
+
+```
+HTTP 400 {"message":"No query found"}
+```
+
+whether or not your token is valid, because the API only serves Apollo
+persisted queries now: an `operationName`, a registered `sha256Hash`, and
+`variables`. This script sends that instead. The large query heredoc is no
+longer transmitted; it is left in place for reference.
+
+A quick way to tell an auth problem from a request-shape problem: an *invalid*
+token returns `401 {"errorCode":"TOKEN_NEEDS_REFRESH"}`, because auth is checked
+before the body is parsed. So a 400 means your token was accepted.
+
+### When the hash rotates
+
+Hashes are tied to the web bundle and change on deploy. The symptom is a 400 or
+`PersistedQueryNotFound`. To get the current one: DevTools, Network, filter
+`graphql`, reload the transactions page, click a `GetTransactions` request, and
+copy `extensions.persistedQuery.sha256Hash` from the Payload tab. Then
+
+```bash
+CK_QUERY_HASH=<new hash> ruby fetch_credit_karma_transactions
+```
+
+`CK_CLIENT_NAME`, `CK_CLIENT_VERSION` and `CK_CLIENT_TZ` override the same way,
+so no code edit is needed.
+
 ## Usage
 
 ```bash
@@ -101,6 +133,27 @@ $ START_CURSOR=dHhuIzIwMjMtMDItMjEjMTgzODQ4MzIzMF8w ruby fetch_credit_karma_tran
 Set the env var `DEBUG=1` to see the json entries for each transaction printed
 as they're processed.  This uses `awesome_print`, so you might need to run `gem
 install awesome_print`
+
+## Rebuilding the CSV
+
+The CSV is written by interpolating fields into a quoted string, so a
+description containing a newline splits the row. Real data does contain these.
+The JSON dump is one raw transaction per line and is unaffected, so rebuild
+from it:
+
+```bash
+tools/rebuild_csv.py
+```
+
+That writes `creditkarma_transactions_clean.csv` with RFC 4180 quoting, and
+falls back to the description for the Mint "Description" column when a
+transaction has no merchant (about 40% of rows in one sample).
+
+## How far back the data goes
+
+On one current account the API returned about two years and then reported
+`hasNextPage: false`. Accounts with Mint history imported earlier may go
+further; if you only get ~24 months, that is the API, not the script.
 
 ## TODO
 
