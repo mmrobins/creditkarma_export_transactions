@@ -11,6 +11,14 @@ require 'json'
 # only need this for debugging, and not in standard lib
 require 'awesome_print' if ENV['DEBUG']
 
+# Credit Karma moved to Apollo persisted queries: the server no longer accepts a
+# query document, only an operationName + registered sha256 hash + variables.
+# Hash captured from the prime_web client's own GetTransactions call.
+PERSISTED_QUERY_HASH = ENV.fetch('CK_QUERY_HASH', 'e84296c61147719ced605fbba7bb30ef847903dd07f3a4f7c2ea8d0db107338e')
+CK_CLIENT_NAME    = ENV.fetch('CK_CLIENT_NAME', 'prime_web')
+CK_CLIENT_VERSION = ENV.fetch('CK_CLIENT_VERSION', '2.0.35')
+CK_CLIENT_TZ      = ENV.fetch('CK_CLIENT_TZ', 'America/Los_Angeles')
+
 def debug(msg)
   ap msg if ENV['DEBUG']
 end
@@ -3890,12 +3898,25 @@ def get_transactions(after_cursor = nil)
   }
 
   params = {
-    "query": @query,
+    "operationName": "GetTransactions",
     'variables': variables,
+    "extensions": {
+      "persistedQuery": {
+        "version": 1,
+        "sha256Hash": PERSISTED_QUERY_HASH,
+      },
+    },
   }
   headers = {
       'Authorization' => "Bearer #{@access_token}",
-      'Content-Type' =>'application/json',
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json',
+      'ck-client-name' => CK_CLIENT_NAME,
+      'ck-client-version' => CK_CLIENT_VERSION,
+      'ck-device-type' => 'Desktop',
+      'ck-client-tz-id' => CK_CLIENT_TZ,
+      'Origin' => 'https://www.creditkarma.com',
+      'Referer' => 'https://www.creditkarma.com/',
   }
 
   uri = URI('https://api.creditkarma.com/graphql')

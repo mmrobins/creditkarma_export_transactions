@@ -1,6 +1,7 @@
 .env
-creditkarma_transactions.csv
-creditkarma_transactions.json
+creditkarma_transactions*.csv
+creditkarma_transactions*.json
+*.har
 
 # IDE
 .idea
